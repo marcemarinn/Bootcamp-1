@@ -1,6 +1,5 @@
 ﻿using Core.Requests;
 using FluentValidation;
-using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Validations;
 
