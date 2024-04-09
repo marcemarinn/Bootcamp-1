@@ -22,6 +22,10 @@ public class ExceptionHandleMiddleware
         {
             await _next(context);
         }
+        catch (NameIsAlreadyTakenException nameTakedEx)
+        {
+            await HandleNameAlreadyExistException(context, nameTakedEx);
+        }
         catch (NotFoundException notFoundEx)
         {
             await HandleNotFoundException(context, notFoundEx);
@@ -30,6 +34,8 @@ public class ExceptionHandleMiddleware
         {
             await HandleUnexpectedException(context, ex);
         }
+       
+
     }
 
     private async Task HandleUnexpectedException(HttpContext context, Exception ex)
@@ -57,6 +63,21 @@ public class ExceptionHandleMiddleware
         var error = new ErrorModel
         {
             Message = notFoundEx.Message
+        };
+
+        var errorJson = JsonSerializer.Serialize(error);
+
+        await context.Response.WriteAsync(errorJson);
+    }
+
+    private async Task HandleNameAlreadyExistException(HttpContext context, NameIsAlreadyTakenException nameTakedEx)
+    {
+        context.Response.ContentType = _jsonContentType;
+        context.Response.StatusCode = (int)HttpStatusCode.Conflict;
+
+        var error = new ErrorModel
+        {
+            Message = nameTakedEx.Message
         };
 
         var errorJson = JsonSerializer.Serialize(error);

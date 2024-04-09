@@ -55,12 +55,13 @@ public class BankRepository : IBankRepository
 
     public async Task<BankDTO> GetById(int id)
     {
-        throw new Exception("No se pudo conectar a la base de datos");
 
+        //throw new Exception("No se pudo conectar a la base de datos");
         var bank = await _context.Banks.FindAsync(id);
 
         //if (bank is null) throw new Exception("Bank not found");
-        if(bank is null) throw new NotFoundException($"Bank with id: {id} doest not exist");
+        if (bank is null)
+        throw new NotFoundException($"Bank with id: {id} doest not exist"); 
 
         var bankDTO = bank.Adapt<BankDTO>();
 
@@ -69,7 +70,9 @@ public class BankRepository : IBankRepository
 
     public async Task<bool> NameIsAlreadyTaken(string name)
     {
-        return await _context.Banks.AnyAsync(bank => bank.Name == name);
+
+        //return await _context.Banks.AnyAsync(bank => bank.Name == name);
+        throw new NameIsAlreadyTakenException($"Bank with Name: {name} is already taken");
     }
 
     public async Task<BankDTO> Update(UpdateBankModel model)

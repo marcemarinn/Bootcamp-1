@@ -11,9 +11,11 @@ public class CreateBankModelValidation : AbstractValidator<CreateBankModel>
             .NotNull().WithMessage("Name cannot be null")
             .NotEmpty().WithMessage("Name cannot be empty")
             .MinimumLength(5).WithMessage("Name must have at least 5 characters");
+            
 
         RuleFor(x => x.Mail)
             .EmailAddress();
+        
 
         RuleFor(x => x.Phone)
             .NotNull().WithMessage("Phone cannot be null")

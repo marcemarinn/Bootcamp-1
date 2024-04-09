@@ -21,9 +21,9 @@ public class CustomerRepository : ICustomerRepository
             .Include(c => c.Bank)
             .AsQueryable();
 
-        if(filter.BirthYearFrom is not null)
+        if (filter.BirthYearFrom is not null)
         {
-            query = query.Where(x => 
+            query = query.Where(x =>
                 x.Birth != null &&
                 x.Birth.Value.Year >= filter.BirthYearFrom);
         }
