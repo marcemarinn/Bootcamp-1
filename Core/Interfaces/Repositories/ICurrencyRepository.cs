@@ -12,7 +12,7 @@ namespace Core.Interfaces.Repositories
     {
         Task<List<CurrencyDTO>> GetFiltered(FilterCurrencyModel filter);
 
-        Task<List<CurrencyDTO>> Add(CreateCurrencyModel model);
+        Task <CurrencyDTO> Add(CreateCurrencyModel model);
 
     }
 }

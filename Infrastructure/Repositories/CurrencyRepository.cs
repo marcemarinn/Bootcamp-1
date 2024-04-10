@@ -3,7 +3,6 @@ using Core.Interfaces.Repositories;
 using Core.Models;
 using Core.Requests;
 using Infrastructure.Contexts;
-using Infrastructure.Entities;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,17 +22,17 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<CurrencyDTO>> Add(CreateCurrencyModel model)
+        public async Task<CurrencyDTO> Add(CreateCurrencyModel model)
         {
             var currencyToCreate = model.Adapt<Currency>();
 
-            _context.Banks.Add(currencyToCreate);
+            _context.Currency.Add(currencyToCreate);
 
             await _context.SaveChangesAsync();
 
-            var bankDTO = currencyToCreate.Adapt<BankDTO>();
+            var currencyDTO = currencyToCreate.Adapt<CurrencyDTO>();
 
-            return bankDTO;
+            return currencyDTO;
         }
 
         public async Task<List<CurrencyDTO>> GetFiltered(FilterCurrencyModel filter)
@@ -42,7 +41,8 @@ namespace Infrastructure.Repositories
 
             if (filter.Id.HasValue && filter.Id > 0)
             {
-                query = query.Where(x => x.Id >= filter.Id);
+                query = query.Where(x =>
+                x.Id >= filter.Id);
             }
 
             if (!string.IsNullOrEmpty(filter.Name))
