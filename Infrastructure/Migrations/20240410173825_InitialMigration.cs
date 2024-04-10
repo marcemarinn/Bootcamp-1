@@ -55,8 +55,9 @@ namespace Infrastructure.Migrations
                     Address = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
                     Mail = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     Phone = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    Estado = table.Column<int>(type: "integer", nullable: false),
-                    BankId = table.Column<int>(type: "integer", nullable: false)
+                    CustomerStatus = table.Column<int>(type: "integer", nullable: false),
+                    BankId = table.Column<int>(type: "integer", nullable: false),
+                    Birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,6 +95,42 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Accounts_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CreditCards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Denomination = table.Column<string>(type: "text", nullable: false),
+                    ExpeditionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CardNumber = table.Column<string>(type: "text", nullable: false),
+                    CVV = table.Column<string>(type: "text", nullable: false),
+                    CardStatus = table.Column<int>(type: "integer", nullable: false),
+                    CreditLimit = table.Column<decimal>(type: "numeric", nullable: false),
+                    AvailableBalance = table.Column<decimal>(type: "numeric", nullable: false),
+                    CurrentDebt = table.Column<decimal>(type: "numeric", nullable: false),
+                    InterestRate = table.Column<decimal>(type: "numeric", nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("CreditCard_pkey", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CreditCards_Currency_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currency",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CreditCards_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
@@ -177,6 +214,16 @@ namespace Infrastructure.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CreditCards_CurrencyId",
+                table: "CreditCards",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CreditCards_CustomerId",
+                table: "CreditCards",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CurrentAccounts_AccountId",
                 table: "CurrentAccounts",
                 column: "AccountId");
@@ -200,6 +247,9 @@ namespace Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CreditCards");
+
             migrationBuilder.DropTable(
                 name: "CurrentAccounts");
 

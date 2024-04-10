@@ -2,7 +2,7 @@
 using Core.Interfaces.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Infrastructure.Contexts;
+using Infrastructure.Context;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Mapster;
@@ -31,7 +31,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("Bootcamp");
 
-        services.AddDbContext<BootcampContext>(options =>
+        services.AddDbContext<Bootcampp2Context>(options =>
         {
             options.UseNpgsql(connectionString);
         });
@@ -44,6 +44,8 @@ public static class DependencyInjection
         services.AddScoped<IBankRepository, BankRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+        services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+
 
 
         return services;
@@ -54,6 +56,8 @@ public static class DependencyInjection
         services.AddScoped<IBankService, BankService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<ICurrencyService, CurrencyService>();
+        services.AddScoped<ICreditCardService, CreditCardService>();
+
 
 
         return services;

@@ -1,16 +1,18 @@
-﻿using Core.Interfaces.Repositories;
+﻿using Core.Entities;
+using Core.Interfaces.Repositories;
 using Core.Models;
 using Core.Requests;
-using Infrastructure.Contexts;
+using Infrastructure.Context;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public class CustomerRepository : ICustomerRepository
 {
-    private readonly BootcampContext _context;
+    private readonly Bootcampp2Context _context;
 
-    public CustomerRepository(BootcampContext context)
+    public CustomerRepository(Bootcampp2Context context)
     {
         _context = context;
     }
@@ -57,5 +59,18 @@ public class CustomerRepository : ICustomerRepository
                 Address = x.Bank.Address
             }
         }).ToList();
+    }
+
+    public async Task<CustomerDTO> Add(CreateCustomerModel model)
+    {
+        var customerToCreate = model.Adapt<Customer>();
+
+        _context.Customers.Add(customerToCreate);
+
+        await _context.SaveChangesAsync();
+
+        var customerDTO = customerToCreate.Adapt<CustomerDTO>();
+
+        return customerDTO;
     }
 }

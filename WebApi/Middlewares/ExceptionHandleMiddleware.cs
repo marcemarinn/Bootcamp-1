@@ -22,10 +22,6 @@ public class ExceptionHandleMiddleware
         {
             await _next(context);
         }
-        catch (NameIsAlreadyTakenException nameTakedEx)
-        {
-            await HandleNameAlreadyExistException(context, nameTakedEx);
-        }
         catch (NotFoundException notFoundEx)
         {
             await HandleNotFoundException(context, notFoundEx);
@@ -34,7 +30,8 @@ public class ExceptionHandleMiddleware
         {
             await HandleUnexpectedException(context, ex);
         }
-       
+        
+
 
     }
 

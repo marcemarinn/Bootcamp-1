@@ -1,5 +1,7 @@
 ﻿using Core.Interfaces.Services;
+using Core.Models;
 using Core.Requests;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -18,5 +20,12 @@ public class CustomerController : BaseApiController
     {
         var customers = await _customerService.GetFiltered(filter);
         return Ok(customers);
+    }
+
+    [HttpPost("add")]
+    public async Task<IActionResult> Add([FromBody] CreateCustomerModel model)
+    {
+       
+        return Ok(await _customerService.Add(model));
     }
 }

@@ -31,7 +31,10 @@ public partial class Bootcampp2Context : DbContext
 
     public virtual DbSet<SavingAccount> SavingAccounts { get; set; }
 
-   
+    public virtual DbSet<CreditCard> CreditCards { get; set; }
+
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,6 +45,8 @@ public partial class Bootcampp2Context : DbContext
         modelBuilder.ApplyConfiguration(new SavingAccountConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
         modelBuilder.ApplyConfiguration(new MovementConfiguration());
+        modelBuilder.ApplyConfiguration(new CreditCardConfiguration());
+
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -2,7 +2,7 @@
 using Core.Interfaces.Repositories;
 using Core.Models;
 using Core.Requests;
-using Infrastructure.Contexts;
+using Infrastructure.Context;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,9 +15,9 @@ namespace Infrastructure.Repositories
 {
     public class CurrencyRepository : ICurrencyRepository
     {
-        private readonly BootcampContext _context;
+        private readonly Bootcampp2Context _context;
 
-        public CurrencyRepository(BootcampContext context)
+        public CurrencyRepository(Bootcampp2Context context)
         {
             _context = context;
         }
@@ -47,7 +47,8 @@ namespace Infrastructure.Repositories
 
             if (!string.IsNullOrEmpty(filter.Name))
             {
-                query = query.Where(x => x.Name != null && x.Name.ToUpper() == filter.Name.ToUpper());
+                query = query.Where(x => 
+                x.Name != null && x.Name.ToUpper() == filter.Name.ToUpper());
             }
 
             var result = await query.ToListAsync();

@@ -3,7 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces.Repositories;
 using Core.Models;
 using Core.Requests;
-using Infrastructure.Contexts;
+using Infrastructure.Context;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +11,9 @@ namespace Infrastructure.Repositories;
 
 public class BankRepository : IBankRepository
 {
-    private readonly BootcampContext _context;
+    private readonly Bootcampp2Context _context;
 
-    public BankRepository(BootcampContext context)
+    public BankRepository(Bootcampp2Context context)
     {
         _context = context;
     }
@@ -71,8 +71,8 @@ public class BankRepository : IBankRepository
     public async Task<bool> NameIsAlreadyTaken(string name)
     {
 
-        //return await _context.Banks.AnyAsync(bank => bank.Name == name);
-        throw new NameIsAlreadyTakenException($"Bank with Name: {name} is already taken");
+        return await _context.Banks.AnyAsync(bank => bank.Name == name);
+        //throw new NameIsAlreadyTakenException($"Bank with Name: {name} is already taken");
     }
 
     public async Task<BankDTO> Update(UpdateBankModel model)
