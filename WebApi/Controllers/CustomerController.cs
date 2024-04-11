@@ -2,6 +2,7 @@
 using Core.Models;
 using Core.Requests;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -16,6 +17,7 @@ public class CustomerController : BaseApiController
     }
 
     [HttpGet("filtered")]
+    [Authorize]
     public async Task<IActionResult> GetFiltered([FromQuery] FilterCustomersModel filter)
     {
         var customers = await _customerService.GetFiltered(filter);
@@ -23,6 +25,7 @@ public class CustomerController : BaseApiController
     }
 
     [HttpPost("add")]
+    [Authorize]
     public async Task<IActionResult> Add([FromBody] CreateCustomerModel model)
     {
        

@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddMapping();
         services.AddValidation();
 
+
         return services;
     }
 
@@ -45,6 +46,8 @@ public static class DependencyInjection
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
+
 
 
 
@@ -57,6 +60,10 @@ public static class DependencyInjection
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<ICurrencyService, CurrencyService>();
         services.AddScoped<ICreditCardService, CreditCardService>();
+        services.AddScoped<IAccountService, AccountService>();
+
+        services.AddScoped<IJwtProvider, JwtProvider>();
+
 
 
 

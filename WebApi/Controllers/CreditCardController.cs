@@ -2,6 +2,7 @@
 using Core.Models;
 using Core.Requests;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -16,6 +17,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add([FromBody] CreateCreditCardModel model)
         {
             
@@ -23,6 +25,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetById([FromQuery] int id)
         {
 
@@ -30,12 +33,14 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody] CreditCardDTO model)
         {
 
             return Ok(await _service.Update(model));
         }
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> Delete([FromQuery] int id)
         {
 
@@ -43,6 +48,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("/all")]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
 

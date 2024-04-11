@@ -9,8 +9,8 @@ public class CurrentAccountConfiguration : IEntityTypeConfiguration<CurrentAccou
     public void Configure(EntityTypeBuilder<CurrentAccount> entity)
     {
         entity
-            .HasKey(e => e.Id)
-            .HasName("CurrentAccount_pkey");
+           .HasKey(e => e.Id)
+           .HasName("CurrentAccount_pkey");
 
         entity
             .Property(e => e.Interest)
@@ -26,7 +26,7 @@ public class CurrentAccountConfiguration : IEntityTypeConfiguration<CurrentAccou
 
         entity
             .HasOne(d => d.Account)
-            .WithMany(p => p.CurrentAccounts)
-            .HasForeignKey(d => d.AccountId);
+            .WithOne(p => p.CurrentAccount)
+            .HasForeignKey<CurrentAccount>(d => d.AccountId);
     }
 }
