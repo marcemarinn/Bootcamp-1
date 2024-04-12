@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Core.DTOs;
 using Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,8 @@ namespace Core.Requests
         public string Holder { get; set; } = string.Empty;
         public string Number { get; set; } = string.Empty;
         public AccountType Type { get; set; } = AccountType.Current;
-        public decimal Balance { get; set; }
         public AccountStatus Status { get; set; } = AccountStatus.Active;
+        public decimal Balance { get; set; }
 
         public int CurrencyId { get; set; }
         //public Currency Currency { get; set; } = null!;
@@ -22,7 +23,9 @@ namespace Core.Requests
         public int CustomerId { get; set; }
         //public Customer Customer { get; set; } = null!;
 
-        //public SavingAccount? SavingAccount { get; set; }
-        //public CurrentAccount? CurrentAccount { get; set; }
+
+
+        public CreateSavingAccountDTO? CreateSavingAccountDTO { get; set; }
+        public CreateCurrentAccountDTO? CreateCurrentAccountDTO { get; set; }
     }
 }

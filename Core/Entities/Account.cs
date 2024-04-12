@@ -19,5 +19,7 @@ public class Account
 
     public SavingAccount? SavingAccount { get; set; }
     public CurrentAccount? CurrentAccount { get; set; }
+
+    public bool IsDeleted { get; set; }
     public virtual ICollection<Movement> Movements { get; set; } = new List<Movement>();
 }

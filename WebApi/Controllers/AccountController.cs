@@ -22,7 +22,31 @@ public class AccountController : BaseApiController
     {
 
         return Ok(await _accountService.Add(model));
-    } 
+    }
+
+    [HttpGet]
+
+    public async Task<IActionResult> GetById([FromQuery] int customerId)
+    {
+
+        return Ok(await _accountService.GetById(customerId));
+    }
+
+    [HttpDelete]
+
+    public async Task<IActionResult> Delete([FromQuery] int id)
+    {
+
+        return Ok(await _accountService.Delete(id));
+    }
+
+    [HttpGet("/filter")]
+
+    public async Task<IActionResult> Filter([FromQuery] FilterAccountModel filter)
+    {
+
+        return Ok(await _accountService.Filter(filter));
+    }
 
 
 

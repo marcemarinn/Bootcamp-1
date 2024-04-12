@@ -1,12 +1,7 @@
-﻿using Core.Entities;
-using Core.Models;
+﻿using Core.DTOs;
+using Core.Entities;
 using Core.Requests;
 using Mapster;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Mappings
 {

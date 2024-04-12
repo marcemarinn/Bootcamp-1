@@ -9,15 +9,15 @@ namespace Core.Requests
 {
     public class CreateCreditCardModel
     {
-        public string Denomination { get; set; }
+        public string? Denomination { get; set; }
 
         public DateTime ExpeditionDate { get; set; }
 
         public DateTime DueDate { get; set; }
 
-        public string CardNumber { get; set; }
+        public string? CardNumber { get; set; }
 
-        public string CVV { get; set; }
+        public string? CVV { get; set; }
 
         public CardStatus CardStatus { get; set; }
 

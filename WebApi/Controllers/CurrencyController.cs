@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Services;
+﻿using Core.DTOs;
+using Core.Interfaces.Services;
 using Core.Models;
 using Core.Requests;
 using Infrastructure.Services;
@@ -18,7 +19,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("filtered")]
-        [Authorize]
+        
         public async Task<List<CurrencyDTO>> GetFiltered([FromQuery] FilterCurrencyModel filter)
         {
             var currency = await _currencyService.GetFiltered(filter);
@@ -26,7 +27,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("add")]
-        [Authorize]
+       
         public async Task<CurrencyDTO> Add([FromBody] CreateCurrencyModel model)
         {
             var currency = await _currencyService.Add(model);

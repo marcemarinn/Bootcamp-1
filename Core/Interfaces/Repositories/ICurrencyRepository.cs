@@ -1,10 +1,5 @@
-﻿using Core.Models;
-using Core.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Requests;
+using Core.DTOs;
 
 namespace Core.Interfaces.Repositories
 {

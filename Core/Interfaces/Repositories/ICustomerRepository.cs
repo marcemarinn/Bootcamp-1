@@ -1,4 +1,4 @@
-﻿using Core.Models;
+﻿using Core.DTOs;
 using Core.Requests;
 
 namespace Core.Interfaces.Repositories;

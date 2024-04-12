@@ -1,7 +1,6 @@
-﻿using Core.Interfaces.Services;
-using Core.Models;
+﻿using Core.DTOs;
+using Core.Interfaces.Services;
 using Core.Requests;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

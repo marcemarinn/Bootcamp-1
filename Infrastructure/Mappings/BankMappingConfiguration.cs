@@ -1,5 +1,5 @@
-﻿using Core.Entities;
-using Core.Models;
+﻿using Core.DTOs;
+using Core.Entities;
 using Core.Requests;
 using Mapster;
 

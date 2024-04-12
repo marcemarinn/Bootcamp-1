@@ -1,4 +1,4 @@
-﻿using Core.Models;
+﻿using Core.DTOs;
 using Core.Requests;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,11 @@ namespace Core.Interfaces.Services
     public interface IAccountService
     {
         Task<AccountDTO> Add(CreateAccountModel model);
-        Task<AccountDTO> GetById(int id);
+        Task<List<AccountDTO>> GetById(int id);
+        Task<bool> Delete(int id);
+        Task <List<AccountDTO>> Filter(FilterAccountModel model);
+
+
 
 
 

@@ -1,16 +1,12 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
-using Core.Models;
 using Core.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
+
+
     public class CreditCardService : ICreditCardService
     {
 

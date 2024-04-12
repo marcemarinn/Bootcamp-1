@@ -1,15 +1,10 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
+using Core.Entities;
 using Core.Interfaces.Repositories;
-using Core.Models;
 using Core.Requests;
 using Infrastructure.Context;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -56,6 +51,16 @@ namespace Infrastructure.Repositories
             return result.Select(currency => currency.Adapt<CurrencyDTO>()).ToList();
 
 
+        }
+
+        Task<CurrencyDTO> ICurrencyRepository.Add(CreateCurrencyModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<CurrencyDTO>> ICurrencyRepository.GetFiltered(FilterCurrencyModel filter)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,19 +1,18 @@
-﻿using Core.Models;
+﻿using Core.DTOs;
 using Core.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Core.Interfaces.Repositories
+namespace Core.Interfaces.Repositories;
+
+public interface IAccountRepository
 {
-    public interface IAccountRepository
-    {
-        Task<AccountDTO> Add(CreateAccountModel model);
-        Task<AccountDTO> GetById(int id);
+    Task<AccountDTO> Add(CreateAccountModel model);
+
+    Task<List<AccountDTO>> GetById(int id);
+
+    Task<bool> Delete(int id);
+
+    Task <List<AccountDTO>> Filter(FilterAccountModel model);
 
 
 
-    }
 }

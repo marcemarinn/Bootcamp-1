@@ -1,6 +1,6 @@
 ﻿using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
-using Core.Models;
+using Core.DTOs;
 using Core.Requests;
 
 namespace Infrastructure.Services;
@@ -23,4 +23,6 @@ public class CustomerService : ICustomerService
     {
         return await _repository.Add(model);
     }
+
+   
 }
