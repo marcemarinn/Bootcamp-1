@@ -17,7 +17,7 @@ public class BankController : BaseApiController
     }
 
     [HttpPost]
-    [Authorize]
+   
     public async Task<IActionResult> Create([FromBody] CreateBankModel request)
     {
         return Ok(await _service.Add(request));

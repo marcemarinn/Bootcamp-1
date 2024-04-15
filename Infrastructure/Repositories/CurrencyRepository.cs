@@ -53,14 +53,7 @@ namespace Infrastructure.Repositories
 
         }
 
-        Task<CurrencyDTO> ICurrencyRepository.Add(CreateCurrencyModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<List<CurrencyDTO>> ICurrencyRepository.GetFiltered(FilterCurrencyModel filter)
-        {
-            throw new NotImplementedException();
-        }
+       
+        
     }
 }

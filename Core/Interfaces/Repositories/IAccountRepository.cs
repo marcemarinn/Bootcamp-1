@@ -6,7 +6,7 @@ namespace Core.Interfaces.Repositories;
 public interface IAccountRepository
 {
     Task<AccountDTO> Add(CreateAccountModel model);
-
+    Task<CreateCurrentAccountDTO> AddCurrentAccount(CreateCurrentAccountModel model);
     Task<List<AccountDTO>> GetById(int id);
 
     Task<bool> Delete(int id);

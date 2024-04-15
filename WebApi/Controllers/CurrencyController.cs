@@ -26,12 +26,12 @@ namespace WebApi.Controllers
             return (currency);
         }
 
-        [HttpPost("add")]
+        [HttpPost("/add")]
        
         public async Task<CurrencyDTO> Add([FromBody] CreateCurrencyModel model)
         {
-            var currency = await _currencyService.Add(model);
-            return (currency);
+            
+            return (await _currencyService.Add(model));
         }
 
 

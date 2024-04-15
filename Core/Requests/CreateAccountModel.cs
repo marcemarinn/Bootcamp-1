@@ -23,9 +23,9 @@ namespace Core.Requests
         public int CustomerId { get; set; }
         //public Customer Customer { get; set; } = null!;
 
-
-
+        public CreateCurrentAccountModel? CreateCurrentAccount{ get; set; }
         public CreateSavingAccountDTO? CreateSavingAccountDTO { get; set; }
-        public CreateCurrentAccountDTO? CreateCurrentAccountDTO { get; set; }
+
+
     }
 }

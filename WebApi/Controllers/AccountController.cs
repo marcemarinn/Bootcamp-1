@@ -3,6 +3,7 @@ using Core.Models;
 using Core.Requests;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebApi.Controllers;
 
@@ -20,6 +21,10 @@ public class AccountController : BaseApiController
 
     public async Task<IActionResult> Add([FromBody]CreateAccountModel model)
     {
+        //if (!ModelState.IsValid)
+        //{
+        //    return BadRequest(ModelState);
+        //}
 
         return Ok(await _accountService.Add(model));
     }

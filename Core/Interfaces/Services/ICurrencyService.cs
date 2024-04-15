@@ -8,7 +8,7 @@ namespace Core.Interfaces.Services
     {
     Task<List<CurrencyDTO>> GetFiltered(FilterCurrencyModel filter);
 
-    Task<CurrencyDTO> Add(CreateCurrencyModel filter);
+    Task<CurrencyDTO> Add(CreateCurrencyModel model);
 
 
 

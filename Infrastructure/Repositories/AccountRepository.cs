@@ -4,106 +4,111 @@ using Core.Entities;
 using Core.Exceptions;
 using Core.Interfaces.Repositories;
 using Core.Requests;
+using FluentValidation;
 using Infrastructure.Context;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories;
-
-public class AccountRepository : IAccountRepository
+namespace Infrastructure.Repositories
 {
-    private readonly Bootcampp2Context _context;
-
-    public AccountRepository (Bootcampp2Context context)
+    public class AccountRepository : IAccountRepository
     {
-        _context = context;
-    }
+        private readonly Bootcampp2Context _context;
 
-   //TODO:
-    public async Task<AccountDTO> Add(CreateAccountModel model)
-    {
-
-        var accountToCreate = model.Adapt<Account>();
-        
-        if (accountToCreate.Type == AccountType.Current ) 
-        { 
-        
-        
-        }
-
-
-        _context.Accounts.Add(accountToCreate);
-            
-       await _context.SaveChangesAsync();
-
-        var accountDTO = accountToCreate.Adapt<AccountDTO>();
-        return accountDTO;
-
-
-    }
-
-    public async Task<bool> Delete(int id)
-    {
-        var account = await _context.Accounts.FindAsync(id);
-        
-        if (account is null)
+        public AccountRepository(Bootcampp2Context context)
         {
-            throw new NotFoundException($"Account with id: {id} doest not exist");
+            _context = context;
         }
-    
-        account.IsDeleted = true;
-        await _context.SaveChangesAsync();
+        private readonly IValidator<CreateCurrentAccountDTO> _currentAccountValidator;
 
-        return true;
-        
-    }
-
-    public async Task<List<AccountDTO>> GetById(int customerId)
-    {
-        var account = await _context.Customers.FindAsync(customerId);
-        var query = _context.Accounts.AsQueryable();
-
-        if (account is null  )
+        public async Task<AccountDTO> Add(CreateAccountModel model)
         {
-            throw new Exception("the customer account was not found");
+            var accountToCreate = model.Adapt<Account>();
+
+            _context.Accounts.Add(accountToCreate);
+
+            await _context.SaveChangesAsync();
+
+            var accountDTO = accountToCreate.Adapt<AccountDTO>();
+
+            return accountDTO;
         }
-        
-        var result = await query.ToListAsync();
-        return result.Select(c => c.Adapt<AccountDTO>()).ToList();
-
-    }
-
-
-    public async Task <List<AccountDTO>> Filter(FilterAccountModel filter )
-    {
-        var query = _context.Accounts.AsQueryable();
-    
-
-
-        if (filter.Number is not null)
+        public async Task<CreateCurrentAccountDTO> AddCurrentAccount(CreateCurrentAccountModel model)
         {
-            query = query.Where(a => 
-            a.Number == filter.Number);
-           
+            var currentAccountToCreate = model.Adapt<CurrentAccount>();
+
+            _context.CurrentAccounts.Add(currentAccountToCreate);
+
+            await _context.SaveChangesAsync();
+
+            var currentAccountDTO = currentAccountToCreate.Adapt<CreateCurrentAccountDTO>();
+
+            return currentAccountDTO;
         }
 
-        if (filter.Type is not null)
+        public async Task<bool> Delete(int id)
         {
-            query = query.Where(a =>
-            a.Type == filter.Type);
+            var account = await _context.Accounts.FindAsync(id);
+
+            if (account is null)
+            {
+                throw new NotFoundException($"Account with id: {id} doest not exist");
+            }
+
+            account.IsDeleted = true;
+            await _context.SaveChangesAsync();
+
+            return true;
+
         }
 
-        if (filter.CurrencyId is not null)
+        public async Task<List<AccountDTO>> GetById(int customerId)
         {
-            query = query.Where(a =>
-            a.CurrencyId == filter.CurrencyId);
+            var account = await _context.Customers.FindAsync(customerId);
+            var query = _context.Accounts.AsQueryable();
+
+            if (account is null)
+            {
+                throw new Exception("the customer account was not found");
+            }
+
+            var result = await query.ToListAsync();
+            return result.Select(c => c.Adapt<AccountDTO>()).ToList();
+
         }
 
 
-        var result = await query.ToListAsync();
+        public async Task<List<AccountDTO>> Filter(FilterAccountModel filter)
+        {
+            var query = _context.Accounts.AsQueryable();
 
-        return result.Select(c => c.Adapt<AccountDTO>()).ToList();
 
 
+            if (filter.Number is not null)
+            {
+                query = query.Where(a =>
+                a.Number == filter.Number);
+
+            }
+
+            if (filter.Type is not null)
+            {
+                query = query.Where(a =>
+                a.Type == filter.Type);
+            }
+
+            if (filter.CurrencyId is not null)
+            {
+                query = query.Where(a =>
+                a.CurrencyId == filter.CurrencyId);
+            }
+
+
+            var result = await query.ToListAsync();
+
+            return result.Select(c => c.Adapt<AccountDTO>()).ToList();
+
+
+        }
     }
 }

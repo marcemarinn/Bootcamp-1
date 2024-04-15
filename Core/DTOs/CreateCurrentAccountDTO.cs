@@ -1,15 +1,24 @@
-﻿using Core.Entities;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Core.DTOs;
 
 public class CreateCurrentAccountDTO
 {
-    public int Id { get; set; }
+
+    [Required(ErrorMessage = "El campo OperationalLimit es obligatorio.")]
     public decimal? OperationalLimit { get; set; }
+
+    [Required(ErrorMessage = "El campo MonthAverage es obligatorio.")]
     public decimal? MonthAverage { get; set; }
+
+    [Required(ErrorMessage = "El campo Interest es obligatorio.")]
     public decimal? Interest { get; set; }
 
-    public int AccountId { get; set; }
+}
+
+
+
+    
     //public Account Account { get; set; } = null!;
 
-}
+

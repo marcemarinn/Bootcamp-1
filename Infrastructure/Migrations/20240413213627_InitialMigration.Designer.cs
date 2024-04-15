@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Bootcampp2Context))]
-    [Migration("20240410173825_InitialMigration")]
+    [Migration("20240413213627_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -46,6 +46,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Holder")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Number")
                         .IsRequired()
@@ -114,11 +117,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("CVV")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("CardNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("CardStatus")
@@ -127,17 +128,18 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("CreditLimit")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("CurrencyId")
+                    b.Property<int?>("CurrencyId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<decimal>("CurrentDebt")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Denomination")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DueDate")
@@ -207,7 +209,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("CurrentAccount_pkey");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("AccountId")
+                        .IsUnique();
 
                     b.ToTable("CurrentAccounts");
                 });
@@ -318,7 +321,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("SavingAccount_pkey");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("AccountId")
+                        .IsUnique();
 
                     b.ToTable("SavingAccounts");
                 });
@@ -364,8 +368,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.CurrentAccount", b =>
                 {
                     b.HasOne("Core.Entities.Account", "Account")
-                        .WithMany("CurrentAccounts")
-                        .HasForeignKey("AccountId")
+                        .WithOne("CurrentAccount")
+                        .HasForeignKey("Core.Entities.CurrentAccount", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -397,8 +401,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.SavingAccount", b =>
                 {
                     b.HasOne("Core.Entities.Account", "Account")
-                        .WithMany("SavingAccounts")
-                        .HasForeignKey("AccountId")
+                        .WithOne("SavingAccount")
+                        .HasForeignKey("Core.Entities.SavingAccount", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -407,11 +411,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
-                    b.Navigation("CurrentAccounts");
+                    b.Navigation("CurrentAccount");
 
                     b.Navigation("Movements");
 
-                    b.Navigation("SavingAccounts");
+                    b.Navigation("SavingAccount");
                 });
 
             modelBuilder.Entity("Core.Entities.Bank", b =>

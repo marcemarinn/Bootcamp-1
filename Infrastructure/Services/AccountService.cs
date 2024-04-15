@@ -9,17 +9,53 @@ public class AccountService : IAccountService
 {
     private readonly IAccountRepository _accountRepository;
 
-    public AccountService (IAccountRepository accountRepository)
+    public AccountService(IAccountRepository accountRepository)
     {
         _accountRepository = accountRepository;
     }
 
-    public Task<AccountDTO> Add(CreateAccountModel model)
+    public async Task<AccountDTO> Add(CreateAccountModel model)
     {
-        return _accountRepository.Add(model);
+        var evaluaCuenta = EvaluarCuenta(model);
+        var accountDTO = new AccountDTO();
+
+        if (string.IsNullOrEmpty(evaluaCuenta))
+        {
+            accountDTO = await _accountRepository.Add(model);
+            switch (model.Type)
+            {
+                case Core.Constants.AccountType.Current:
+                    int accountId = accountDTO.Id;
+                    model.CreateCurrentAccountDTO.AccountId = accountId;
+                     _accountRepository.AddCurrentAccount(model.CreateCurrentAccountDTO);
+                    break;
+                case Core.Constants.AccountType.Saving:
+                    break;
+            }
+        }
+
+        return accountDTO;
     }
 
-    public Task <List<AccountDTO>>  GetById(int id) 
+    private string EvaluarCuenta(CreateAccountModel model)
+    {
+        switch (model.Type)
+        {
+            case Core.Constants.AccountType.Current:
+
+                if (model.CreateCurrentAccountDTO?.OperationalLimit == 0)
+                    return "requerido";
+
+                break;
+            case Core.Constants.AccountType.Saving:
+                if (model.CreateCurrentAccountDTO?.OperationalLimit == 0)
+                    return "requerido";
+                break;           
+        }
+        return string.Empty;
+    }
+
+    public Task<List<AccountDTO>> GetById(int id)
     {
         return _accountRepository.GetById((id));
     }
@@ -34,5 +70,5 @@ public class AccountService : IAccountService
         return _accountRepository.Filter(model);
     }
 
-    
+
 }

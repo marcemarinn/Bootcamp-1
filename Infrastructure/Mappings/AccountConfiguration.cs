@@ -40,14 +40,12 @@ public class AccountConfiguration : IRegister
     .Map(dest => dest.Id, src => src.Id)
     .Map(dest => dest.OperationalLimit, src => src.OperationalLimit)
     .Map(dest => dest.MonthAverage, src => src.MonthAverage)
-    .Map(dest => dest.Interest, src => src.Interest)
-    .Map(dest => dest.AccountId, src => src.AccountId);
+    .Map(dest => dest.Interest, src => src.Interest);
 
         config.NewConfig<CreateSavingAccountDTO, SavingAccount>()
 
     .Map(dest => dest.SavingType, src => src.SavingType)
-    .Map(dest => dest.HolderName, src => src.HolderName)
-    .Map(dest => dest.AccountId, src => src.AccountId);
+    .Map(dest => dest.HolderName, src => src.HolderName);
 
      
 

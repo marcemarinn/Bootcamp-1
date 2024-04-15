@@ -82,7 +82,8 @@ namespace Infrastructure.Migrations
                     Balance = table.Column<decimal>(type: "numeric(20,5)", precision: 20, scale: 5, nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CurrencyId = table.Column<int>(type: "integer", nullable: false),
-                    CustomerId = table.Column<int>(type: "integer", nullable: false)
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,11 +108,11 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Denomination = table.Column<string>(type: "text", nullable: false),
+                    Denomination = table.Column<string>(type: "text", nullable: true),
                     ExpeditionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CardNumber = table.Column<string>(type: "text", nullable: false),
-                    CVV = table.Column<string>(type: "text", nullable: false),
+                    CardNumber = table.Column<string>(type: "text", nullable: true),
+                    CVV = table.Column<string>(type: "text", nullable: true),
                     CardStatus = table.Column<int>(type: "integer", nullable: false),
                     CreditLimit = table.Column<decimal>(type: "numeric", nullable: false),
                     AvailableBalance = table.Column<decimal>(type: "numeric", nullable: false),
@@ -226,7 +227,8 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CurrentAccounts_AccountId",
                 table: "CurrentAccounts",
-                column: "AccountId");
+                column: "AccountId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_BankId",
@@ -241,7 +243,8 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SavingAccounts_AccountId",
                 table: "SavingAccounts",
-                column: "AccountId");
+                column: "AccountId",
+                unique: true);
         }
 
         /// <inheritdoc />

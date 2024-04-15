@@ -9,11 +9,5 @@ public class AccountDTO
     public decimal? OperationalLimit { get; set; }
     public decimal? MonthAverage { get; set; }
     public decimal? Interest { get; set; }
-
-    public int AccountId { get; set; }
-    public Account Account { get; set; } = null!;
-
-
-
-
+    public AccountType Type { get; set; } = AccountType.Current;
 }
