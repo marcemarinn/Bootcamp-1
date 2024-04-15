@@ -19,14 +19,10 @@ public class AccountController : BaseApiController
 
     [HttpPost]
 
-    public async Task<IActionResult> Add([FromBody]CreateAccountModel model)
+    public async Task<IActionResult> Create([FromBody]CreateAccountRequest request)
     {
-        //if (!ModelState.IsValid)
-        //{
-        //    return BadRequest(ModelState);
-        //}
-
-        return Ok(await _accountService.Add(model));
+        
+         return  Ok(await _accountService.Create(request));
     }
 
     [HttpGet]

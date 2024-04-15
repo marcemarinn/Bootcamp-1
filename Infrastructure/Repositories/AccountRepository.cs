@@ -19,32 +19,50 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        private readonly IValidator<CreateCurrentAccountDTO> _currentAccountValidator;
 
-        public async Task<AccountDTO> Add(CreateAccountModel model)
+        public async Task<AccountDTO> Create(CreateAccountRequest request)
         {
-            var accountToCreate = model.Adapt<Account>();
 
-            _context.Accounts.Add(accountToCreate);
+            ///*A modo de ejemplo*/
+            //#region PRUEBA
+            //var currency = new Currency()
+            //{
+            //    Name = "Dolares Americanos",
+            //    BuyValue = 10,
+            //    SellValue = 20,
+            //};
+            //_context.Currency.Add(currency);
+
+            //throw new Exception("Algo malo pasó");
+            //#endregion
+
+            var account = request.Adapt<Account>();
+
+            if (account.Type == AccountType.Saving)
+            {
+                account.SavingAccount = request.CreateSavingAccount.Adapt<SavingAccount>();
+            }
+
+            if (account.Type == AccountType.Current)
+            {
+                account.CurrentAccount = request.CreateCurrentAccount.Adapt<CurrentAccount>();
+            }
+
+            _context.Accounts.Add(account);
 
             await _context.SaveChangesAsync();
 
-            var accountDTO = accountToCreate.Adapt<AccountDTO>();
+            var createdAccount = await _context.Accounts
+                .Include(a => a.Currency)
+                .Include(a => a.Customer)
+                .Include(a => a.SavingAccount)
+                .Include(a => a.CurrentAccount)
+                .FirstOrDefaultAsync(a => a.Id == account.Id);
 
-            return accountDTO;
+            return createdAccount.Adapt<AccountDTO>();
         }
-        public async Task<CreateCurrentAccountDTO> AddCurrentAccount(CreateCurrentAccountModel model)
-        {
-            var currentAccountToCreate = model.Adapt<CurrentAccount>();
 
-            _context.CurrentAccounts.Add(currentAccountToCreate);
-
-            await _context.SaveChangesAsync();
-
-            var currentAccountDTO = currentAccountToCreate.Adapt<CreateCurrentAccountDTO>();
-
-            return currentAccountDTO;
-        }
+      
 
         public async Task<bool> Delete(int id)
         {
@@ -110,5 +128,7 @@ namespace Infrastructure.Repositories
 
 
         }
+
+       
     }
 }

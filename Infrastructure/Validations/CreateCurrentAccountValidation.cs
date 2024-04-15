@@ -1,14 +1,14 @@
-﻿using Core.DTOs;
+﻿using Core.Requests;
 using FluentValidation;
 
 namespace Infrastructure.Validations;
 
-public class CreateCurrentAccountValidation : AbstractValidator<CreateCurrentAccountDTO>
+public class CreateCurrentAccountValidation : AbstractValidator<CreateCurrentAccountRequest>
 {
     public CreateCurrentAccountValidation()
     {
         RuleFor(x => x.OperationalLimit)
         .NotNull().WithMessage("OperationalLimit cannot be null")
-        .NotEmpty().WithMessage("OperationalLimit cannot be empty");
+        .GreaterThan(0).WithMessage("OperationalLimit must be greater than 0");
     }
 }

@@ -1,4 +1,5 @@
-﻿using Core.DTOs;
+﻿using Core.Constants;
+using Core.DTOs;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Requests;
@@ -13,48 +14,15 @@ public class AccountService : IAccountService
     {
         _accountRepository = accountRepository;
     }
-
-    public async Task<AccountDTO> Add(CreateAccountModel model)
+    
+    public async Task<AccountDTO> Create(CreateAccountRequest request)
     {
-        var evaluaCuenta = EvaluarCuenta(model);
-        var accountDTO = new AccountDTO();
+        
+         return await _accountRepository.Create(request);
 
-        if (string.IsNullOrEmpty(evaluaCuenta))
-        {
-            accountDTO = await _accountRepository.Add(model);
-            switch (model.Type)
-            {
-                case Core.Constants.AccountType.Current:
-                    int accountId = accountDTO.Id;
-                    model.CreateCurrentAccountDTO.AccountId = accountId;
-                     _accountRepository.AddCurrentAccount(model.CreateCurrentAccountDTO);
-                    break;
-                case Core.Constants.AccountType.Saving:
-                    break;
-            }
-        }
-
-        return accountDTO;
     }
 
-    private string EvaluarCuenta(CreateAccountModel model)
-    {
-        switch (model.Type)
-        {
-            case Core.Constants.AccountType.Current:
-
-                if (model.CreateCurrentAccountDTO?.OperationalLimit == 0)
-                    return "requerido";
-
-                break;
-            case Core.Constants.AccountType.Saving:
-                if (model.CreateCurrentAccountDTO?.OperationalLimit == 0)
-                    return "requerido";
-                break;           
-        }
-        return string.Empty;
-    }
-
+   
     public Task<List<AccountDTO>> GetById(int id)
     {
         return _accountRepository.GetById((id));

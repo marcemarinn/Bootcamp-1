@@ -10,7 +10,7 @@ namespace Core.Interfaces.Services
 {
     public interface IAccountService
     {
-        Task<AccountDTO> Add(CreateAccountModel model);
+        Task<AccountDTO> Create (CreateAccountRequest model);
         Task<List<AccountDTO>> GetById(int id);
         Task<bool> Delete(int id);
         Task <List<AccountDTO>> Filter(FilterAccountModel model);

@@ -21,7 +21,7 @@ public partial class Bootcampp2Context : DbContext
 
     public virtual DbSet<Bank> Banks { get; set; }
 
-    public virtual DbSet<Currency> Currency { get; set; }
+    public virtual DbSet<Currency> Currencies { get; set; }
 
     public virtual DbSet<CurrentAccount> CurrentAccounts { get; set; }
 
@@ -32,6 +32,15 @@ public partial class Bootcampp2Context : DbContext
     public virtual DbSet<SavingAccount> SavingAccounts { get; set; }
 
     public virtual DbSet<CreditCard> CreditCards { get; set; }
+
+    public virtual DbSet<Company> Companies { get; set; }
+
+    public virtual DbSet<Promotion> Promotions { get; set; }
+
+    public virtual DbSet<CompanyPromotion> CompaniesPromotion { get; set; }
+
+
+
 
 
 
@@ -46,6 +55,10 @@ public partial class Bootcampp2Context : DbContext
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
         modelBuilder.ApplyConfiguration(new MovementConfiguration());
         modelBuilder.ApplyConfiguration(new CreditCardConfiguration());
+        modelBuilder.ApplyConfiguration(new CompanyConfiguration());
+        modelBuilder.ApplyConfiguration(new PromotionConfiguration());
+        modelBuilder.ApplyConfiguration(new CompanyPromotionConfiguration());
+
 
 
         OnModelCreatingPartial(modelBuilder);

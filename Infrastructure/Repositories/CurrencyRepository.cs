@@ -21,7 +21,7 @@ namespace Infrastructure.Repositories
         {
             var currencyToCreate = model.Adapt<Currency>();
 
-            _context.Currency.Add(currencyToCreate);
+            _context.Currencies.Add(currencyToCreate);
 
             await _context.SaveChangesAsync();
 
@@ -32,7 +32,7 @@ namespace Infrastructure.Repositories
 
         public async Task<List<CurrencyDTO>> GetFiltered(FilterCurrencyModel filter)
         {
-            var query = _context.Currency.AsQueryable();
+            var query = _context.Currencies.AsQueryable();
 
             if (filter.Id.HasValue && filter.Id > 0)
             {
