@@ -1,10 +1,10 @@
-﻿namespace Core.DTOs;
+﻿namespace Core.Requests;
 
-public class PromotionDTO
+public class CreatePromotionRequest
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
+
     public decimal DiscountPercentage { get; set; }
 }

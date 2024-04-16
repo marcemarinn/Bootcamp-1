@@ -6,9 +6,19 @@ namespace Infrastructure.Configurations
 {
     public class PromotionConfiguration : IEntityTypeConfiguration<Promotion>
     {
-        public void Configure(EntityTypeBuilder<Promotion> builder)
+        public void Configure(EntityTypeBuilder<Promotion> entity)
         {
-            builder.HasKey(p => p.Id);
+            entity.HasKey(p => p.Id);
+
+
+            entity
+                .Property(p => p.DiscountPercentage)
+                .IsRequired();
+
+            entity
+                .HasMany(p => p.CompanyPromotion)
+                .WithOne(pe => pe.Promotion)
+                .HasForeignKey(pe => pe.PromotionId);
 
         }
     }

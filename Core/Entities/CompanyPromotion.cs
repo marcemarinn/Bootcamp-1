@@ -1,7 +1,10 @@
-﻿namespace Core.Entities;
+﻿using System.Globalization;
+
+namespace Core.Entities;
 
 public class CompanyPromotion
 {
+
     public int CompanyId { get; set; }
     public int PromotionId { get; set; }
 

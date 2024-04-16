@@ -1,13 +1,11 @@
 ﻿using Core.DTOs;
 using Core.Requests;
 
-namespace Core.Interfaces.Repositories;
+namespace Core.Interfaces.Services;
 
-public interface IPromotionRepository
+public interface IPromotionService
 {
 
     Task<PromotionDTO> Create(CreatePromotionRequest model);
-
-
 
 }
