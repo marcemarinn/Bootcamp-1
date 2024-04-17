@@ -20,5 +20,11 @@ namespace WebApi.Controllers
             return await _promotionService.Create(model);
         }
 
+        [HttpPut]
+
+        public async Task<PromotionDTO> Update(PromotionDTO request)
+        {
+            return await _promotionService.Update(request);
+        }
     }
 }

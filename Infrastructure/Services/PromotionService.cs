@@ -20,4 +20,9 @@ public class PromotionService : IPromotionService
         return await _promotionRepository.Create(request);
 
     }
+
+    public async Task<PromotionDTO> Update(PromotionDTO request)
+    {
+        return await _promotionRepository.Update(request);
+    }
 }

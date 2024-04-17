@@ -51,6 +51,14 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         entity.HasMany(c => c.CreditCards) 
                .WithOne(cc => cc.Customer) 
                .HasForeignKey(cc => cc.CustomerId) 
-               .IsRequired(); 
+               .IsRequired();
+
+        entity
+                .HasMany(c => c.ProductsRequest) // Propiedad de navegación en la clase Customer
+                .WithOne(pr => pr.Customer) // Propiedad de navegación en la clase ProductRequest
+                .HasForeignKey(pr => pr.CustomerId);
+
+
+
     }
 }

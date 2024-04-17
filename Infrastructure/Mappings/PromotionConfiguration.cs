@@ -15,6 +15,7 @@ public class PromotionConfiguration : IRegister
                 .Map(dest => dest.Name, src => src.Name)
                 .Map(dest => dest.Start, src => src.Start)
                 .Map(dest => dest.End, src => src.End)
+                
                 .Map(dest => dest.DiscountPercentage, src => src.DiscountPercentage);
 
 
@@ -26,7 +27,7 @@ public class PromotionConfiguration : IRegister
                 .Map(dest => dest.Id, src => src.Id)
                 .Map(dest => dest.Name, src => src.Name)
                  .Map(dest => dest.Start, src => src.Start)
-                 .Map(dest => dest.CompanyIds,src => src.CompanyIds)
+
                 .Map(dest => dest.End, src => src.End);
 
 

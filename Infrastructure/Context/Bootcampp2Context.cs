@@ -38,6 +38,10 @@ public partial class Bootcampp2Context : DbContext
     public virtual DbSet<Promotion> Promotions { get; set; }
 
     public virtual DbSet<CompanyPromotion> CompaniesPromotion { get; set; }
+    public virtual DbSet<ProductRequest> ProductRequests { get; set; }
+    public virtual DbSet<Product> Products { get; set; }
+
+
 
 
 
@@ -58,6 +62,10 @@ public partial class Bootcampp2Context : DbContext
         modelBuilder.ApplyConfiguration(new CompanyConfiguration());
         modelBuilder.ApplyConfiguration(new PromotionConfiguration());
         modelBuilder.ApplyConfiguration(new CompanyPromotionConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductRequestConfiguration());
+
+
 
 
 

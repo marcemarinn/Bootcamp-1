@@ -9,7 +9,8 @@ public class Promotion
     public DateTime End { get; set; }
     public int DiscountPercentage { get; set; }
 
-    public List<int> CompanyIds { get; set; }
+
+
 
 
 

@@ -4,7 +4,6 @@ using Core.Interfaces.Repositories;
 using Core.Requests;
 using Infrastructure.Context;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -43,5 +42,25 @@ public class PromotionRepository : IPromotionRepository
 
     }
 
+    public async Task<PromotionDTO> Update(PromotionDTO model)
+    {
+        var promotion = await _bootcampp2Context.Promotions.FindAsync(model.Id);
 
+        if (promotion is null) throw new Exception("promotion was not found");
+
+        model.Adapt(promotion);
+
+        _bootcampp2Context.Promotions.Update(promotion);
+
+        await _bootcampp2Context.SaveChangesAsync();
+
+        var promotionDTO = promotion.Adapt<PromotionDTO>();
+
+        return promotionDTO;
+
+
+
+    }
+
+    
 }

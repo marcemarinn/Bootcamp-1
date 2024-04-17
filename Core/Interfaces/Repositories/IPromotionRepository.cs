@@ -8,6 +8,9 @@ public interface IPromotionRepository
 
     Task<PromotionDTO> Create(CreatePromotionRequest model);
 
+    Task<PromotionDTO> Update(PromotionDTO model);
+
+
 
 
 }

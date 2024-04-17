@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Bootcampp2Context))]
-    partial class Bootcampp2ContextModelSnapshot : ModelSnapshot
+    [Migration("20240417193008_addEntityProductAndProductRequest")]
+    partial class addEntityProductAndProductRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +68,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Accounts", (string)null);
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("Core.Entities.Bank", b =>
@@ -99,7 +102,7 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("Bank_pkey");
 
-                    b.ToTable("Banks", (string)null);
+                    b.ToTable("Banks");
                 });
 
             modelBuilder.Entity("Core.Entities.Company", b =>
@@ -128,7 +131,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("Core.Entities.CompanyPromotion", b =>
@@ -143,7 +146,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("CompaniesPromotion", (string)null);
+                    b.ToTable("CompaniesPromotion");
                 });
 
             modelBuilder.Entity("Core.Entities.CreditCard", b =>
@@ -199,7 +202,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("CreditCards", (string)null);
+                    b.ToTable("CreditCards");
                 });
 
             modelBuilder.Entity("Core.Entities.Currency", b =>
@@ -224,7 +227,7 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("Currency_pkey");
 
-                    b.ToTable("Currencies", (string)null);
+                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("Core.Entities.CurrentAccount", b =>
@@ -253,7 +256,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("CurrentAccounts", (string)null);
+                    b.ToTable("CurrentAccounts");
                 });
 
             modelBuilder.Entity("Core.Entities.Customer", b =>
@@ -299,17 +302,12 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id")
                         .HasName("Customer_pkey");
 
                     b.HasIndex("BankId");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Core.Entities.Movement", b =>
@@ -342,7 +340,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("Movements", (string)null);
+                    b.ToTable("Movements");
                 });
 
             modelBuilder.Entity("Core.Entities.Product", b =>
@@ -369,7 +367,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("BankId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Core.Entities.ProductRequest", b =>
@@ -395,9 +393,6 @@ namespace Infrastructure.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("CustomerId1")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
@@ -414,11 +409,9 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("CustomerId1");
-
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductRequests", (string)null);
+                    b.ToTable("ProductRequests");
                 });
 
             modelBuilder.Entity("Core.Entities.Promotion", b =>
@@ -444,7 +437,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promotions", (string)null);
+                    b.ToTable("Promotions");
                 });
 
             modelBuilder.Entity("Core.Entities.SavingAccount", b =>
@@ -472,7 +465,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("SavingAccounts", (string)null);
+                    b.ToTable("SavingAccounts");
                 });
 
             modelBuilder.Entity("Core.Entities.Account", b =>
@@ -551,10 +544,6 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Product", null)
-                        .WithMany("Customers")
-                        .HasForeignKey("ProductId");
-
                     b.Navigation("Bank");
                 });
 
@@ -590,12 +579,8 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Customer", null)
-                        .WithMany("ProductsRequest")
-                        .HasForeignKey("CustomerId1");
-
                     b.HasOne("Core.Entities.Product", "Product")
-                        .WithMany("ProductsRequest")
+                        .WithMany("ProductRequest")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -651,15 +636,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Accounts");
 
                     b.Navigation("CreditCards");
-
-                    b.Navigation("ProductsRequest");
                 });
 
             modelBuilder.Entity("Core.Entities.Product", b =>
                 {
-                    b.Navigation("Customers");
-
-                    b.Navigation("ProductsRequest");
+                    b.Navigation("ProductRequest");
                 });
 
             modelBuilder.Entity("Core.Entities.Promotion", b =>

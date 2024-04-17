@@ -17,6 +17,7 @@ public class CompanyConfiguration : IRegister
 
 
         config.NewConfig<Company, CompanyDTO>()
+             .Map(dest => dest.Id, src => src.Id)
              .Map(dest => dest.Name, src => src.Name)
              .Map(dest => dest.Email, src => src.Email)
              .Map(dest => dest.PhoneNumber, src => src.PhoneNumber)

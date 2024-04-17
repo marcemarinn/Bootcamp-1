@@ -7,5 +7,7 @@ public interface IPromotionService
 {
 
     Task<PromotionDTO> Create(CreatePromotionRequest model);
+    Task<PromotionDTO> Update(PromotionDTO request);
+
 
 }
