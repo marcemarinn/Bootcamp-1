@@ -1,6 +1,6 @@
 # Requisitos del Sistema Bancario
 
-## 1. Registro de SOLICITUD Productos del Banco
+## 1. Registro de solicitud del producto.
 
 ### Ejemplos de Productos
 - **Crédito:** El cliente establece el monto que desea y el plazo de preferencia.
