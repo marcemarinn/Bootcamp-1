@@ -22,11 +22,23 @@ public class PromotionRepository : IPromotionRepository
         var promotionToCreate = model.Adapt<Promotion>();
 
         _bootcampp2Context.Promotions.Add(promotionToCreate);
-
         await _bootcampp2Context.SaveChangesAsync();
 
-        var promotionDTO = promotionToCreate.Adapt<PromotionDTO>();
+        if (model.CompanyIds != null && model.CompanyIds.Any())
+        {
+            foreach (var companyId in model.CompanyIds)
+            {
+                var companyPromotion = new CompanyPromotion
+                {
+                    CompanyId = companyId,
+                    PromotionId = promotionToCreate.Id 
+                };
+                _bootcampp2Context.CompaniesPromotion.Add(companyPromotion);
+            }
+            await _bootcampp2Context.SaveChangesAsync();
+        }
 
+        var promotionDTO = promotionToCreate.Adapt<PromotionDTO>();
         return promotionDTO;
 
     }

@@ -20,5 +20,6 @@ namespace Infrastructure.Mappings
                 .Map(dest => dest.BuyValue, src => src.BuyValue)
                 .Map(dest => dest.SellValue, src => src.SellValue);
         }
+
     }
 }
