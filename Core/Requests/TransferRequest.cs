@@ -1,10 +1,13 @@
-﻿namespace Core.Requests;
+﻿using Core.Entities;
+
+namespace Core.Requests;
 
 public class TransferRequest
 {
     public Decimal Amount { get; set; }
     public string Description { get; set; }
 
+    public int bankId { get; set; }
     public DateTime TransferDateTime { get; set; }
 
     public int CurrencyId { get; set; }

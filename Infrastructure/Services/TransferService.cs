@@ -1,8 +1,10 @@
-﻿using Core.DTOs;
+﻿using Core.Constants;
+using Core.DTOs;
 using Core.Entities;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Requests;
+using Infrastructure.Context;
 using Infrastructure.Repositories;
 
 namespace Infrastructure.Services;
@@ -11,50 +13,47 @@ public class TransferService : ITransferService
 {
 
     private readonly ITransferRepository _transferRepository;
+    private readonly Bootcampp2Context _bootcampp2Context;
 
-    public TransferService(ITransferRepository transferRepository)
+    public TransferService(ITransferRepository transferRepository, Bootcampp2Context context)
     {
         _transferRepository = transferRepository;
+        _bootcampp2Context = context;
     }
 
-    public Task<TransferDTO> Create(TransferRequest request)
+    public async Task<TransferDTO> Create(TransferRequest request)
     {
-        var senderAccount =  _transferRepository.FindAsync(request.SenderId);
-        var receiverAccount =  _transferRepository.FyndAsync(request.ReceiverId);
 
-        if (senderAccount == null || receiverAccount == null ||
-            senderAccount.AccountType != receiverAccount.AccountType ||
-            senderAccount.CurrencyId != receiverAccount.CurrencyId ||
-            request.Amount <= 0 || request.Amount > senderAccount.Balance ||
-            !senderAccount.IsActive)
+        var senderAccount = await _bootcampp2Context.Accounts.FindAsync(request.SenderId);
+        var receiverAccount = await _bootcampp2Context.Accounts.FindAsync(request.ReceiverId);
+        switch (GetAccountValidationStatus(senderAccount, receiverAccount, request.Amount))
         {
-            throw new ArgumentException("Transferencia no válida.");
+            case AccountValidationsStatus.SenderNotFound:
+                throw new Exception("senderId was not found");
+            case AccountValidationsStatus.SenderNotActive:
+                throw new Exception("Origin Account is not active");
+            case AccountValidationsStatus.SenderBalanceInsufficient:
+                throw new Exception("sender's account balance is insufficient.");
+            case AccountValidationsStatus.Success:
+                break;
+            default:
+                break;
         }
+       
+        return await _transferRepository.Create(request);
 
-        var senderOriginalBalance = senderAccount.Balance;
-        var receiverOriginalBalance = receiverAccount.Balance;
+    }
+    public AccountValidationsStatus GetAccountValidationStatus(Account senderAccount, Account receiverAccount, decimal amount)
+    {
+        if (senderAccount is null)
+            return AccountValidationsStatus.SenderNotFound;
 
-        senderAccount.Balance -= request.Amount;
-        receiverAccount.Balance += request.Amount;
+        if (senderAccount.IsDeleted)
+            return AccountValidationsStatus.SenderNotActive;
 
-        var senderMovement = new Transfer
-        {
-            SenderId = senderAccount.Id,
-            Amount = -request.Amount,
-            TransferDateTime = DateTime.UtcNow,
-            Description = "Transferencia enviada a " + receiverAccount.AccountNumber
-        };
+        if (senderAccount.Balance < amount)
+            return AccountValidationsStatus.SenderBalanceInsufficient;
 
-        var receiverMovement = new Transfer
-        {
-            ReceiverId = receiverAccount.Id,
-            Amount = request.Amount,
-            TransferDateTime = DateTime.UtcNow,
-            Description = "Transferencia recibida de " + senderAccount.AccountNumber
-        };
-
-        var updateAccountsResult = await _repository.UpdateAccountsAsync(senderAccount, receiverAccount);
-        var addMovementsResult = await _repository.AddMovementsAsync(senderMovement, receiverMovement);
-
+        return AccountValidationsStatus.Success;
     }
 }
