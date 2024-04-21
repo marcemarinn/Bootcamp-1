@@ -25,11 +25,6 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
 
         entity
             .HasMany(account => account.Movements)
-            .WithOne(movement => movement.Account)
-            .HasForeignKey(movement => movement.AccountId);
-
-        entity
-            .HasMany(account => account.Movements)
             .WithOne(currentAccount => currentAccount.Account)
             .HasForeignKey(account => account.AccountId);
 
@@ -42,5 +37,10 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
             .HasOne(account => account.CurrentAccount)
             .WithOne(savingAccount => savingAccount.Account)
             .HasForeignKey<CurrentAccount>(savingAccount => savingAccount.AccountId);
+
+        
+
+      
+
     }
 }

@@ -32,5 +32,8 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         entity.HasMany(c => c.CreditCards)
                 .WithOne(cc => cc.Currency)
                 .HasForeignKey(cc => cc.CurrencyId);
+
+
+      
     }
 }

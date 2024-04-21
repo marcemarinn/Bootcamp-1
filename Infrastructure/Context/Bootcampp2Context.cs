@@ -38,15 +38,11 @@ public partial class Bootcampp2Context : DbContext
     public virtual DbSet<Promotion> Promotions { get; set; }
 
     public virtual DbSet<CompanyPromotion> CompaniesPromotion { get; set; }
+
     public virtual DbSet<ProductRequest> ProductRequests { get; set; }
     public virtual DbSet<Product> Products { get; set; }
 
-
-
-
-
-
-
+    public virtual DbSet<Transfer> Transfers { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,6 +60,8 @@ public partial class Bootcampp2Context : DbContext
         modelBuilder.ApplyConfiguration(new CompanyPromotionConfiguration());
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new ProductRequestConfiguration());
+        modelBuilder.ApplyConfiguration(new TransferConfiguration());
+
 
 
 
