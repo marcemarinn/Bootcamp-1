@@ -1,13 +1,9 @@
-﻿using Core.Constants;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Entities;
 using Core.Interfaces.Repositories;
 using Core.Requests;
 using Infrastructure.Context;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Infrastructure.Repositories;
 
@@ -37,7 +33,6 @@ public class TransferRepository : ITransferRepository
         {
             throw new Exception("Por favor, completa el campo del banco de destino.");
         }
-
 
         //if (senderAccount is null) throw new Exception("senderId was not found");
         //if (receiverAccount is null) throw new Exception("receiverId was not found");

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Core.Entities;
+﻿using Core.Entities;
 using Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +42,9 @@ public partial class Bootcampp2Context : DbContext
 
     public virtual DbSet<Transfer> Transfers { get; set; }
 
+    public virtual DbSet<ServicePayment> ServicePayments { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -61,6 +62,7 @@ public partial class Bootcampp2Context : DbContext
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new ProductRequestConfiguration());
         modelBuilder.ApplyConfiguration(new TransferConfiguration());
+        modelBuilder.ApplyConfiguration(new ServicePaymentConfiguration());
 
 
 

@@ -20,7 +20,7 @@ public class ProductRequestConfiguration : IEntityTypeConfiguration<ProductReque
 
      
         entity.HasOne(pr => pr.Customer) 
-              .WithMany() 
+              .WithMany(c => c.ProductsRequest) 
               .HasForeignKey(pr => pr.CustomerId);
 
 

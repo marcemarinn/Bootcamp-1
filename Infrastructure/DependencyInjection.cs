@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Repositories;
+﻿using Core.Entities;
+using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -50,6 +51,8 @@ public static class DependencyInjection
         services.AddScoped<IPromotionRepository, PromotionRepository>();
         services.AddScoped<ICompanyRepository, CompanyRepository>();
         services.AddScoped<ITransferRepository, TransferRepository>();
+        services.AddScoped<IServicePaymentRepository, ServicePaymentRepository>();
+
 
         return services;
     }
@@ -64,6 +67,8 @@ public static class DependencyInjection
         services.AddScoped<IPromotionService, PromotionService>();
         services.AddScoped<ICompanyService, CompanyService>();
         services.AddScoped<ITransferService, TransferService>();
+        services.AddScoped<IServicePaymentService, ServicePaymentService>();
+
 
 
 

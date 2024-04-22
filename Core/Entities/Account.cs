@@ -24,6 +24,6 @@ public class Account
 
     public virtual ICollection<Transfer> TransfersReceived { get; set; } = new List<Transfer>();
     public virtual ICollection<Transfer> TransfersSent { get; set; } = new List<Transfer>();
-
+    public virtual ICollection<ServicePayment> ServicePayments { get; set; } = new List<ServicePayment>();
     public virtual ICollection<Movement> Movements { get; set; } = new List<Movement>();
 }
