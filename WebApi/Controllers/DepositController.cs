@@ -18,7 +18,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(DepositRequest request)
         {
-            return Ok(_depositService.Create(request));
+            return Ok(await _depositService.Create(request));
         }
     }
 }

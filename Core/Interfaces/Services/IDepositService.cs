@@ -5,7 +5,7 @@ namespace Core.Interfaces.Services;
 
 public interface IDepositService
 {
-    Task<DepositDTO> Create(DepositRequest request);
+    Task <DepositDTO> Create(DepositRequest request);
 
 }
 

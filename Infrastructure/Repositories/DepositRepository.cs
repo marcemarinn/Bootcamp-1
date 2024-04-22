@@ -19,16 +19,27 @@ public class DepositRepository : IDepositRepository
 
     public async Task<DepositDTO> Create(DepositRequest request)
     {
-        var depositToCreate = request.Adapt<Deposit>();
-        var accountId = await _bootcampContext.Accounts.FindAsync(request.AccountId);
-        var bankId = await _bootcampContext.Banks.FindAsync(request.BankId);
 
-        if (accountId != null && bankId != null ) 
+        var bankId = await _bootcampContext.Banks.FindAsync(request.BankId);
+        var accountId = await _bootcampContext.Accounts.FindAsync(request.AccountId);
+
+        if (accountId == null || bankId == null)
         {
-            accountId.Balance += request.Amount;
-            _bootcampContext.Deposits.Add(depositToCreate);
+            
+            throw new ArgumentException("La cuenta o el banco especificados no existen.");
         }
 
+       
+
+        var depositToCreate = request.Adapt<Deposit>();
+        depositToCreate.OperationDate = DateTime.Now;
+
+        depositToCreate.Account = accountId;
+        depositToCreate.Bank = bankId;
+
+        accountId.Balance += request.Amount;
+
+        _bootcampContext.Deposits.Add(depositToCreate);
         await _bootcampContext.SaveChangesAsync();
 
         return depositToCreate.Adapt<DepositDTO>();
