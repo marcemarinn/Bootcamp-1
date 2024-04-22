@@ -32,7 +32,6 @@ public class DepositRepository : IDepositRepository
        
 
         var depositToCreate = request.Adapt<Deposit>();
-        depositToCreate.OperationDate = DateTime.Now;
 
         depositToCreate.Account = accountId;
         depositToCreate.Bank = bankId;
