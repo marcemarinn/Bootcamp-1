@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(BootcampContext))]
-    partial class BootcampContextModelSnapshot : ModelSnapshot
+    [Migration("20240422145541_ServicePayment")]
+    partial class ServicePayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +32,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AccountId")
-                        .HasColumnType("integer");
 
                     b.Property<decimal>("Balance")
                         .HasPrecision(20, 5)
@@ -64,8 +64,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("Account_pkey");
 
-                    b.HasIndex("AccountId");
-
                     b.HasIndex("CurrencyId");
 
                     b.HasIndex("CustomerId");
@@ -86,9 +84,6 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("character varying(400)");
 
-                    b.Property<int?>("BankId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Mail")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -106,8 +101,6 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("Bank_pkey");
-
-                    b.HasIndex("BankId");
 
                     b.ToTable("Banks");
                 });
@@ -215,36 +208,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BankId");
 
                     b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("Core.Entities.Deposit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("BankId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("OperationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id")
-                        .HasName("Deposit_pkey");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("BankId");
-
-                    b.ToTable("Deposits");
                 });
 
             modelBuilder.Entity("Core.Entities.Enterprise", b =>
@@ -473,10 +436,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
-                    b.HasOne("Core.Entities.Account", null)
-                        .WithMany("Accounts")
-                        .HasForeignKey("AccountId");
-
                     b.HasOne("Core.Entities.Currency", "Currency")
                         .WithMany("Accounts")
                         .HasForeignKey("CurrencyId")
@@ -492,13 +451,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Currency");
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Core.Entities.Bank", b =>
-                {
-                    b.HasOne("Core.Entities.Bank", null)
-                        .WithMany("Banks")
-                        .HasForeignKey("BankId");
                 });
 
             modelBuilder.Entity("Core.Entities.CurrentAccount", b =>
@@ -519,25 +471,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("BankId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Bank");
-                });
-
-            modelBuilder.Entity("Core.Entities.Deposit", b =>
-                {
-                    b.HasOne("Core.Entities.Account", "Account")
-                        .WithMany("Deposits")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Entities.Bank", "Bank")
-                        .WithMany("Deposits")
-                        .HasForeignKey("BankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
 
                     b.Navigation("Bank");
                 });
@@ -635,11 +568,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
-                    b.Navigation("Accounts");
-
                     b.Navigation("CurrentAccount");
-
-                    b.Navigation("Deposits");
 
                     b.Navigation("Movements");
 
@@ -656,11 +585,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Bank", b =>
                 {
-                    b.Navigation("Banks");
-
                     b.Navigation("Customers");
-
-                    b.Navigation("Deposits");
                 });
 
             modelBuilder.Entity("Core.Entities.Currency", b =>

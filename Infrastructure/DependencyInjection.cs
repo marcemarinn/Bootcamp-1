@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Repositories;
+﻿using Core.Entities;
+using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -46,6 +47,10 @@ public static class DependencyInjection
         services.AddScoped<IBankRepository, BankRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<ITransferRepository, TransferRepository>();
+        services.AddScoped<IServicePaymentRepository, ServicePaymentRepository>();
+        services.AddScoped<IDepositRepository, DepositRepository>();
+
 
         return services;
     }
@@ -56,6 +61,13 @@ public static class DependencyInjection
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<ITransferService, TransferService>();
+        services.AddScoped<IServicePaymentService, ServicePaymentService>();
+        services.AddScoped<IDepositService, DepositService>();
+
+
+
+
 
         return services;
     }

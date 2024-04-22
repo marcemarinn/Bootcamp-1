@@ -10,6 +10,7 @@ public class Account
     public AccountType Type { get; set; } = AccountType.Current;
     public decimal Balance { get; set; }
     public AccountStatus Status { get; set; } = AccountStatus.Active;
+    public bool IsDeleted { get; set; }
 
     public int CurrencyId { get; set; }
     public Currency Currency { get; set; } = null!;
@@ -19,5 +20,14 @@ public class Account
 
     public SavingAccount? SavingAccount { get; set; }
     public CurrentAccount? CurrentAccount { get; set; }
+
+    public virtual ICollection<Transfer> TransfersReceived { get; set; } = new List<Transfer>();
+    public virtual ICollection<Transfer> TransfersSent { get; set; } = new List<Transfer>();
     public virtual ICollection<Movement> Movements { get; set; } = new List<Movement>();
+    public virtual ICollection<ServicePayment> PaymentServices { get; set; } = new List<ServicePayment>();
+    public virtual ICollection<Transfer> Transfers { get; set; } = new List<Transfer>();
+    public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
+    public virtual ICollection<Deposit> Deposits { get; set; } = new List<Deposit>();
+
+
 }

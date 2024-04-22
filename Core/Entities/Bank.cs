@@ -7,5 +7,8 @@ public class Bank
     public string Phone { get; set; } = string.Empty;
     public string Mail { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
+    public virtual ICollection<Bank> Banks { get; set; } = new List<Bank>();
+    public virtual ICollection<Deposit> Deposits { get; set; } = new List<Deposit>();
+
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 }

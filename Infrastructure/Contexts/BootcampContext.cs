@@ -29,6 +29,13 @@ public partial class BootcampContext : DbContext
     public virtual DbSet<Promotion> Promotions { get; set; }
     public virtual DbSet<Enterprise> Enterprises { get; set; }
     public virtual DbSet<PromotionEnterprise> PromotionEnterprises { get; set; }
+    public virtual DbSet<Service> Services { get; set; }
+    public virtual DbSet<ServicePayment> ServicePayments { get; set; }
+    public virtual DbSet<Transfer> Transfers { get; set; }
+    public virtual DbSet<Deposit> Deposits { get; set; }
+
+
+
 
     //public virtual DbSet<Currency> Currency { get; set; }
 
@@ -44,6 +51,13 @@ public partial class BootcampContext : DbContext
         modelBuilder.ApplyConfiguration(new EnterpriseConfiguration());
         modelBuilder.ApplyConfiguration(new PromotionConfiguration());
         modelBuilder.ApplyConfiguration(new PromotionEnterpriseConfiguration());
+        modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+        modelBuilder.ApplyConfiguration(new ServicePaymentConfiguration());
+        modelBuilder.ApplyConfiguration(new TransferConfiguration());
+        modelBuilder.ApplyConfiguration(new DepositConfiguration());
+
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }
