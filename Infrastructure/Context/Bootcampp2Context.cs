@@ -44,6 +44,9 @@ public partial class Bootcampp2Context : DbContext
 
     public virtual DbSet<ServicePayment> ServicePayments { get; set; }
 
+    public virtual DbSet<Service> Services { get; set; }
+
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,6 +66,8 @@ public partial class Bootcampp2Context : DbContext
         modelBuilder.ApplyConfiguration(new ProductRequestConfiguration());
         modelBuilder.ApplyConfiguration(new TransferConfiguration());
         modelBuilder.ApplyConfiguration(new ServicePaymentConfiguration());
+        modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+
 
 
 

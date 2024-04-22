@@ -17,6 +17,10 @@ public class ServicePaymentConfiguration : IEntityTypeConfiguration<ServicePayme
             .WithMany(a => a.ServicePayments)
             .HasForeignKey(a => a.AccountId);
 
+        entity
+            .HasOne(sp => sp.Service)
+            .WithMany(s => s.ServicePayments)
+            .HasForeignKey(s => s.ServiceId);
 
     }
 }

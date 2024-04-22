@@ -6,7 +6,7 @@ using Infrastructure.Repositories;
 
 namespace Infrastructure.Services;
 
-public class ServicePaymentService : IServicePaymentRepository
+public class ServicePaymentService : IServicePaymentService
 {
     private readonly IServicePaymentRepository _servicePaymentRepository;
 
