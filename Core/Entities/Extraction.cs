@@ -11,7 +11,7 @@ public class Extraction
 
     public decimal Amount { get; set; }
 
-    public DateTime OperationalDate { get; set; }
+    public DateTime? OperationalDate { get; set; } = DateTime.UtcNow;
 
     public TransactionType TransactionType { get; set; } = TransactionType.Extraction;
 

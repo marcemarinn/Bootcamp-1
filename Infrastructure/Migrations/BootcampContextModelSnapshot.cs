@@ -293,7 +293,7 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("BankId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("OperationalDate")
+                    b.Property<DateTime?>("OperationalDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TransactionType")
@@ -324,7 +324,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("OperationalDate")

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(BootcampContext))]
-    [Migration("20240423145215_Fix6")]
-    partial class Fix6
+    [Migration("20240423181553_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -296,7 +296,7 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("BankId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("OperationalDate")
+                    b.Property<DateTime?>("OperationalDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TransactionType")
@@ -326,11 +326,11 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("OperationalDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("TransactionHistoryId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("TransactionType")
                         .HasColumnType("integer");
@@ -339,8 +339,6 @@ namespace Infrastructure.Migrations
                         .HasName("Movements_pkey");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("TransactionHistoryId");
 
                     b.ToTable("Movements");
                 });
@@ -481,6 +479,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("MovementId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("OperationDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -491,6 +492,8 @@ namespace Infrastructure.Migrations
                         .HasName("TransactionHistory_pkey");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("MovementId");
 
                     b.ToTable("TransactionHistories");
                 });
@@ -633,10 +636,6 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.TransactionHistory", null)
-                        .WithMany("Movements")
-                        .HasForeignKey("TransactionHistoryId");
-
                     b.Navigation("Account");
                 });
 
@@ -697,7 +696,15 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Core.Entities.Movement", "Movement")
+                        .WithMany("TransactionHistories")
+                        .HasForeignKey("MovementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Account");
+
+                    b.Navigation("Movement");
                 });
 
             modelBuilder.Entity("Core.Entities.Transfer", b =>
@@ -784,6 +791,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("PromotionsEnterprises");
                 });
 
+            modelBuilder.Entity("Core.Entities.Movement", b =>
+                {
+                    b.Navigation("TransactionHistories");
+                });
+
             modelBuilder.Entity("Core.Entities.Promotion", b =>
                 {
                     b.Navigation("PromotionsEnterprises");
@@ -792,11 +804,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Service", b =>
                 {
                     b.Navigation("PaymentServices");
-                });
-
-            modelBuilder.Entity("Core.Entities.TransactionHistory", b =>
-                {
-                    b.Navigation("Movements");
                 });
 #pragma warning restore 612, 618
         }
