@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(BootcampContext))]
-    [Migration("20240416132732_PromotionEnterprise")]
-    partial class PromotionEnterprise
+    [Migration("20240423154101_Fix10")]
+    partial class Fix10
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("Balance")
                         .HasPrecision(20, 5)
                         .HasColumnType("numeric(20,5)");
@@ -47,6 +50,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -60,6 +66,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("Account_pkey");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("CurrencyId");
 
@@ -81,6 +89,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("character varying(400)");
 
+                    b.Property<int?>("BankId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Mail")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -98,6 +109,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("Bank_pkey");
+
+                    b.HasIndex("BankId");
 
                     b.ToTable("Banks");
                 });
@@ -207,6 +220,36 @@ namespace Infrastructure.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Core.Entities.Deposit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("BankId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("OperationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id")
+                        .HasName("Deposit_pkey");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("BankId");
+
+                    b.ToTable("Deposits");
+                });
+
             modelBuilder.Entity("Core.Entities.Enterprise", b =>
                 {
                     b.Property<int>("Id")
@@ -236,6 +279,39 @@ namespace Infrastructure.Migrations
                     b.ToTable("Enterprises");
                 });
 
+            modelBuilder.Entity("Core.Entities.Extraction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<int?>("BankId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("OperationalDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id")
+                        .HasName("Extraction_pkey");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("BankId");
+
+                    b.ToTable("Extractions");
+                });
+
             modelBuilder.Entity("Core.Entities.Movement", b =>
                 {
                     b.Property<int>("Id")
@@ -250,16 +326,15 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("Destination")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasColumnType("text");
 
-                    b.Property<int>("TransferStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("TransferredDateTime")
+                    b.Property<DateTime?>("OperationalDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id")
                         .HasName("Movements_pkey");
@@ -334,8 +409,146 @@ namespace Infrastructure.Migrations
                     b.ToTable("SavingAccounts");
                 });
 
+            modelBuilder.Entity("Core.Entities.Service", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id")
+                        .HasName("Service_pkey");
+
+                    b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("Core.Entities.ServicePayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DocumentNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id")
+                        .HasName("ServicePayment_pkey");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServicePayments");
+                });
+
+            modelBuilder.Entity("Core.Entities.TransactionHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("MovementId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("OperationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id")
+                        .HasName("TransactionHistory_pkey");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("MovementId");
+
+                    b.ToTable("TransactionHistories");
+                });
+
+            modelBuilder.Entity("Core.Entities.Transfer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("TransferDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id")
+                        .HasName("Transfer_pkey");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Transfers");
+                });
+
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
+                    b.HasOne("Core.Entities.Account", null)
+                        .WithMany("Accounts")
+                        .HasForeignKey("AccountId");
+
                     b.HasOne("Core.Entities.Currency", "Currency")
                         .WithMany("Accounts")
                         .HasForeignKey("CurrencyId")
@@ -351,6 +564,13 @@ namespace Infrastructure.Migrations
                     b.Navigation("Currency");
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Core.Entities.Bank", b =>
+                {
+                    b.HasOne("Core.Entities.Bank", null)
+                        .WithMany("Banks")
+                        .HasForeignKey("BankId");
                 });
 
             modelBuilder.Entity("Core.Entities.CurrentAccount", b =>
@@ -373,6 +593,40 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Bank");
+                });
+
+            modelBuilder.Entity("Core.Entities.Deposit", b =>
+                {
+                    b.HasOne("Core.Entities.Account", "Account")
+                        .WithMany("Deposits")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Bank", "Bank")
+                        .WithMany("Deposits")
+                        .HasForeignKey("BankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Bank");
+                });
+
+            modelBuilder.Entity("Core.Entities.Extraction", b =>
+                {
+                    b.HasOne("Core.Entities.Account", "Account")
+                        .WithMany("Extractions")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Bank", null)
+                        .WithMany("Extractions")
+                        .HasForeignKey("BankId");
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Core.Entities.Movement", b =>
@@ -416,23 +670,116 @@ namespace Infrastructure.Migrations
                     b.Navigation("Account");
                 });
 
+            modelBuilder.Entity("Core.Entities.ServicePayment", b =>
+                {
+                    b.HasOne("Core.Entities.Account", "Account")
+                        .WithMany("PaymentServices")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Service", "Service")
+                        .WithMany("PaymentServices")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("Core.Entities.TransactionHistory", b =>
+                {
+                    b.HasOne("Core.Entities.Account", "Account")
+                        .WithMany("TransactionHistories")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Movement", "Movement")
+                        .WithMany("TransactionHistories")
+                        .HasForeignKey("MovementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Movement");
+                });
+
+            modelBuilder.Entity("Core.Entities.Transfer", b =>
+                {
+                    b.HasOne("Core.Entities.Account", null)
+                        .WithMany("Transfers")
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("Core.Entities.Currency", "Currency")
+                        .WithMany("Transfers")
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Account", "ReceiverAccount")
+                        .WithMany("TransfersReceived")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Account", "SenderAccount")
+                        .WithMany("TransfersSent")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
+
+                    b.Navigation("ReceiverAccount");
+
+                    b.Navigation("SenderAccount");
+                });
+
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
+                    b.Navigation("Accounts");
+
                     b.Navigation("CurrentAccount");
+
+                    b.Navigation("Deposits");
+
+                    b.Navigation("Extractions");
 
                     b.Navigation("Movements");
 
+                    b.Navigation("PaymentServices");
+
                     b.Navigation("SavingAccount");
+
+                    b.Navigation("TransactionHistories");
+
+                    b.Navigation("Transfers");
+
+                    b.Navigation("TransfersReceived");
+
+                    b.Navigation("TransfersSent");
                 });
 
             modelBuilder.Entity("Core.Entities.Bank", b =>
                 {
+                    b.Navigation("Banks");
+
                     b.Navigation("Customers");
+
+                    b.Navigation("Deposits");
+
+                    b.Navigation("Extractions");
                 });
 
             modelBuilder.Entity("Core.Entities.Currency", b =>
                 {
                     b.Navigation("Accounts");
+
+                    b.Navigation("Transfers");
                 });
 
             modelBuilder.Entity("Core.Entities.Customer", b =>
@@ -445,9 +792,19 @@ namespace Infrastructure.Migrations
                     b.Navigation("PromotionsEnterprises");
                 });
 
+            modelBuilder.Entity("Core.Entities.Movement", b =>
+                {
+                    b.Navigation("TransactionHistories");
+                });
+
             modelBuilder.Entity("Core.Entities.Promotion", b =>
                 {
                     b.Navigation("PromotionsEnterprises");
+                });
+
+            modelBuilder.Entity("Core.Entities.Service", b =>
+                {
+                    b.Navigation("PaymentServices");
                 });
 #pragma warning restore 612, 618
         }

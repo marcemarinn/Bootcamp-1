@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.Constants;
+using Core.Entities;
 using Core.Interfaces.Repositories;
 using Core.Models;
 using Core.Requests;
@@ -18,22 +19,40 @@ public class ExtractionRepository : IExtractionRepository
 
     public async Task<ExtractionDTO> Create(ExtractionRequest request)
     {
-        var extractionToCreate = request.Adapt<Extraction>();
-
         var accountId = await _bootcampContext.Accounts.FindAsync(request.AccountId);
-        var bankId = await _bootcampContext.Banks.FindAsync(request.BankId);
 
-        
-
-        if (accountId == null || bankId == null)
+        if (accountId == null )
         {
+            throw new ArgumentException("La cuenta no existe");
+        }
 
-            throw new ArgumentException("La cuenta o el banco especificados no existen.");
+        if (accountId.Balance < request.Amount)
+        {
+            throw new InvalidOperationException("El saldo de la cuenta es insuficiente para realizar la extracción.");
         }
 
         accountId.Balance -= request.Amount;
-        _bootcampContext.Extraction.Add(extractionToCreate);
+
+        var extractionToCreate = new Extraction
+        {
+            AccountId = request.AccountId,
+            Amount = request.Amount,
+           
+        };
+
+        var movementToCreate = new Movement
+        {
+            AccountId = request.AccountId,
+            Amount = request.Amount,
+            OperationalDate = request.OperationalDate,
+            TransactionType = TransactionType.Extraction
+        };
+
+        _bootcampContext.Extractions.Add(extractionToCreate);
+        _bootcampContext.Movements.Add(movementToCreate);
+
         await _bootcampContext.SaveChangesAsync();
+
         return extractionToCreate.Adapt<ExtractionDTO>();
     }
 }

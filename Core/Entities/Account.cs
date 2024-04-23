@@ -29,7 +29,6 @@ public class Account
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
     public virtual ICollection<Deposit> Deposits { get; set; } = new List<Deposit>();
     public virtual ICollection<Extraction> Extractions { get; set; } = new List<Extraction>();
-    
     public virtual ICollection<TransactionHistory> TransactionHistories { get; set; } = new List<TransactionHistory>();
 
 }

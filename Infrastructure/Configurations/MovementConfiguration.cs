@@ -12,13 +12,16 @@ public class MovementConfiguration : IEntityTypeConfiguration<Movement>
             .HasKey(e => e.Id)
             .HasName("Movements_pkey");
 
-        entity
-            .Property(e => e.Destination)
-            .HasMaxLength(150);
-
+        
         entity
             .HasOne(x => x.Account)
             .WithMany(x => x.Movements)
             .HasForeignKey(x => x.AccountId);
+
+        entity
+            .HasMany(m => m.TransactionHistories)
+            .WithOne(th => th.Movement)
+            .HasForeignKey(th => th.MovementId);
+
     }
 }

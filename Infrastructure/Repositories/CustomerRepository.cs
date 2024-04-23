@@ -58,4 +58,9 @@ public class CustomerRepository : ICustomerRepository
             }
         }).ToList();
     }
+
+    public Task<List<CustomerDTO>> GetFiltered(FilterMovementRequest filter)
+    {
+        throw new NotImplementedException();
+    }
 }

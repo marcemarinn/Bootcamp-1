@@ -10,6 +10,6 @@ namespace Core.Interfaces.Repositories;
 
 public interface ITransactionHistoryRepository
 {
-    Task<List<TransactionDTO>> GetFilteredTransactions(FilterTransactionsModel filter);
+    Task<List<TransactionHistoryDTO>> GetFilteredTransactions(FilterMovementRequest filter);
 
 }

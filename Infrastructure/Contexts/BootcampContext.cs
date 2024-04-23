@@ -34,9 +34,10 @@ public partial class BootcampContext : DbContext
     public virtual DbSet<ServicePayment> ServicePayments { get; set; }
     public virtual DbSet<Transfer> Transfers { get; set; }
     public virtual DbSet<Deposit> Deposits { get; set; }
-    public virtual DbSet<Extraction> Extraction { get; set; }
-    public virtual DbSet<Transaction> TransactionS { get; set; }
-    public virtual DbSet<Transaction> Transactions { get; set; }
+    public virtual DbSet<Extraction> Extractions { get; set; }
+
+    
+    public virtual DbSet<TransactionHistory> TransactionHistories { get; set; }
 
 
 
@@ -62,7 +63,8 @@ public partial class BootcampContext : DbContext
         modelBuilder.ApplyConfiguration(new TransferConfiguration());
         modelBuilder.ApplyConfiguration(new DepositConfiguration());
         modelBuilder.ApplyConfiguration(new ExtractionConfiguration());
-        modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+        modelBuilder.ApplyConfiguration(new TransactionHistoryConfiguration());
+
 
 
 

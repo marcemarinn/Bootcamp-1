@@ -1,6 +1,6 @@
 ﻿namespace Core.Models;
 
-public class TransactionDTO
+public class TransactionHistoryDTO
 {
 
     public int Id { get; set; }
@@ -10,4 +10,6 @@ public class TransactionDTO
     public int AccountId { get; set; }
 
     public decimal Amount { get; set; }
+
+    public DateTime OperationDate { get; set; }
 }

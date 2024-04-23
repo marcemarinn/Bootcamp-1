@@ -16,14 +16,12 @@ namespace Infrastructure.Mappings
         {
             config.NewConfig<ExtractionRequest, Extraction>()
              .Map(dest => dest.Amount, src => src.Amount)
-             .Map(dest => dest.AccountId, src => src.AccountId)
-             .Map(dest => dest.BankId, src => src.BankId);
+             .Map(dest => dest.AccountId, src => src.AccountId);
 
             config.NewConfig<Extraction, ExtractionDTO>()
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Amount, src => src.Amount)
-            .Map(dest => dest.AccountId, src => src.AccountId)
-            .Map(dest => dest.BankId, src => src.BankId);
+            .Map(dest => dest.AccountId, src => src.AccountId);
 
 
 

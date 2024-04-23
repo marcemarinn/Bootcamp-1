@@ -1,8 +1,9 @@
 ﻿using Core.Constants;
+using Core.Entities;
 
-namespace Core.Entities;
+namespace Core.Models;
 
-public class Movement
+public class MovementDTO
 {
     public int Id { get; set; }
     public decimal Amount { get; set; }
@@ -10,9 +11,6 @@ public class Movement
     public DateTime? OperationalDate { get; set; }
     public TransactionType TransactionType { get; set; }
     public int AccountId { get; set; }
-    public Account Account { get; set; } = null!;
-
-    public ICollection<TransactionHistory> TransactionHistories { get; set; } = new List<TransactionHistory>();
 
 
 }

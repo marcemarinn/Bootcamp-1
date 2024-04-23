@@ -6,26 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class TransactionRepository : ITransactionHistoryRepository
+public class TransactionHistoryRepository : ITransactionHistoryRepository
 {
 
     private readonly BootcampContext _bootcampContext;
 
-    public TransactionRepository(BootcampContext bootcampContext)
+    public TransactionHistoryRepository(BootcampContext bootcampContext)
     {
         _bootcampContext = bootcampContext;
     }
 
-    public async Task<List<TransactionDTO>> GetFilteredTransactions(FilterTransactionRequest filter)
+    public async Task<List<TransactionHistoryDTO>> GetFilteredTransactions(FilterMovementRequest filter)
     {
-        var query = _bootcampContext.Transactions
+        var query = _bootcampContext.TransactionHistories
             .Include(t => t.Account)
             .AsQueryable();
 
         // Filtro por cuenta
-        if (filter.AccountId.HasValue)
+        if (filter.AccountId != 0)
         {
-            query = query.Where(t => t.AccountId == filter.AccountId.Value);
+            query = query.Where
+                (t => t.AccountId == filter.AccountId);
         }
 
         // Filtro por mes/año
@@ -42,16 +43,11 @@ public class TransactionRepository : ITransactionHistoryRepository
             query = query.Where(t => t.OperationDate >= filter.StartDate && t.OperationDate <= filter.EndDate);
         }
 
-        // Filtro por descripción
-        if (!string.IsNullOrEmpty(filter.Description))
-        {
-            query = query.Where(t => t.Description.Contains(filter.Description));
-        }
 
         // Ejecutar consulta y mapear a DTO
         var transactions = await query.ToListAsync();
 
-        return transactions.Select(t => new TransactionDTO
+        return transactions.Select(t => new TransactionHistoryDTO
         {
             Id = t.Id,
             AccountId = t.AccountId,
@@ -61,3 +57,4 @@ public class TransactionRepository : ITransactionHistoryRepository
             // Puedes añadir más propiedades según sea necesario
         }).ToList();
     }
+}

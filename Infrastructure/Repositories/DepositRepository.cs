@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.Constants;
+using Core.Entities;
 using Core.Interfaces.Repositories;
 using Core.Models;
 using Core.Requests;
@@ -30,7 +31,6 @@ public class DepositRepository : IDepositRepository
         }
 
        
-
         var depositToCreate = request.Adapt<Deposit>();
 
         depositToCreate.Account = accountId;
@@ -38,6 +38,16 @@ public class DepositRepository : IDepositRepository
 
         accountId.Balance += request.Amount;
 
+        var movementToCreate = new Movement
+        {
+            AccountId = request.AccountId,
+            Amount = request.Amount,
+            OperationalDate = request.OperationDate,
+            TransactionType = TransactionType.Deposit
+        };
+
+
+        _bootcampContext.Movements.Add(movementToCreate);
         _bootcampContext.Deposits.Add(depositToCreate);
         await _bootcampContext.SaveChangesAsync();
 

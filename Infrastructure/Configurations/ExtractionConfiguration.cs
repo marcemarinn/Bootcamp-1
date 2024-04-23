@@ -17,9 +17,9 @@ public class ExtractionConfiguration : IEntityTypeConfiguration<Extraction>
             .WithMany(a => a.Extractions)
             .HasForeignKey(e => e.AccountId);
 
-        builder
-            .HasOne(e => e.Bank)
-            .WithMany(b => b.Extractions)
-            .HasForeignKey(e => e.BankId);
+
+        
     }
+
 }
+
