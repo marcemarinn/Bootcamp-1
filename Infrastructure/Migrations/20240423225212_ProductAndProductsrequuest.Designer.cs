@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(BootcampContext))]
-    partial class BootcampContextModelSnapshot : ModelSnapshot
+    [Migration("20240423225212_ProductAndProductsrequuest")]
+    partial class ProductAndProductsrequuest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -390,9 +393,6 @@ namespace Infrastructure.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
                     b.Property<int>("LoanTerm")
                         .HasColumnType("integer");
 
@@ -567,36 +567,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("MovementId");
 
                     b.ToTable("TransactionHistories");
-                });
-
-            modelBuilder.Entity("Core.Entities.TransactionLimit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DestinationAccountId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OriginAccountId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal?>("TransactionalLimit")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id")
-                        .HasName("TransactionLimit_pkey");
-
-                    b.HasIndex("DestinationAccountId");
-
-                    b.HasIndex("OriginAccountId");
-
-                    b.ToTable("TransactionLimits");
                 });
 
             modelBuilder.Entity("Core.Entities.Transfer", b =>
@@ -839,25 +809,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Movement");
                 });
 
-            modelBuilder.Entity("Core.Entities.TransactionLimit", b =>
-                {
-                    b.HasOne("Core.Entities.Account", "AccountDestiny")
-                        .WithMany("TransactionLimitsDestiny")
-                        .HasForeignKey("DestinationAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Entities.Account", "AccountOrigin")
-                        .WithMany("TransactionLimitsOrigin")
-                        .HasForeignKey("OriginAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AccountDestiny");
-
-                    b.Navigation("AccountOrigin");
-                });
-
             modelBuilder.Entity("Core.Entities.Transfer", b =>
                 {
                     b.HasOne("Core.Entities.Account", null)
@@ -906,10 +857,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("SavingAccount");
 
                     b.Navigation("TransactionHistories");
-
-                    b.Navigation("TransactionLimitsDestiny");
-
-                    b.Navigation("TransactionLimitsOrigin");
 
                     b.Navigation("Transfers");
 

@@ -45,7 +45,7 @@ public class ExtractionRepository : IExtractionRepository
             AccountId = request.AccountId,
             Amount = request.Amount,
             OperationalDate = request.OperationalDate,
-            TransactionType = TransactionType.Extraction
+            TransactionType = TransactionType.EExtraction
         };
 
         _bootcampContext.Extractions.Add(extractionToCreate);

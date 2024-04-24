@@ -8,9 +8,9 @@ namespace Core.Constants
 {
     public enum TransactionType
     {
-        Deposit,
-        Withdrawal,
-        Transfer,
-        Extraction
+        EDeposit,
+        EServicePayment,
+        ETransfer,
+        EExtraction
     }
 }

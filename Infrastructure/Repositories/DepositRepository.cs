@@ -43,7 +43,7 @@ public class DepositRepository : IDepositRepository
             AccountId = request.AccountId,
             Amount = request.Amount,
             OperationalDate = request.OperationDate,
-            TransactionType = TransactionType.Deposit
+            TransactionType = TransactionType.EDeposit
         };
 
 

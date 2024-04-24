@@ -63,4 +63,5 @@ public class ExceptionHandleMiddleware
 
         await context.Response.WriteAsync(errorJson);
     }
+  
 }

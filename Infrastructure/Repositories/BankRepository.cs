@@ -55,7 +55,7 @@ public class BankRepository : IBankRepository
 
     public async Task<BankDTO> GetById(int id)
     {
-        throw new Exception("No se pudo conectar a la base de datos");
+       
 
         var bank = await _context.Banks.FindAsync(id);
 

@@ -53,6 +53,8 @@ public static class DependencyInjection
         services.AddScoped<IExtractionRepository, ExtractionRepository>();
         services.AddScoped<ITransferRepository, TransferRepository>();
         services.AddScoped<IMovementRepository, MovementRepository>();
+        services.AddScoped<IProductRequestRepository, ProductRequestRepository>();
+
 
 
 
@@ -74,6 +76,8 @@ public static class DependencyInjection
         services.AddScoped<IExtractionService, ExtractionService>();
         services.AddScoped<ITransferService, TransferService>();
         services.AddScoped<IMovementService, MovementService>();
+        services.AddScoped<IProductRequestService, ProductRequestService>();
+
 
 
 

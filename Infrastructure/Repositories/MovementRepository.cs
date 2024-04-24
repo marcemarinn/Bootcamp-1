@@ -22,43 +22,63 @@ public class MovementRepository : IMovementRepository
                             .Include(m => m.Account)
                             .AsQueryable();
 
-            // Filtro por AccountId si se proporciona en la solicitud
+           
             if (filter.AccountId != 0)
             {
                 query = query.Where(m => m.AccountId == filter.AccountId);
             }
 
-            // Filtro por mes/año si se proporciona en la solicitud
-            if (filter.Month.HasValue && filter.Year.HasValue)
-            {
-                var firstDayOfMonth = new DateTime(filter.Year.Value, filter.Month.Value, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-                query = query.Where(m => m.OperationalDate >= firstDayOfMonth && m.OperationalDate <= lastDayOfMonth);
-            }
-            else if (filter.Month.HasValue && !filter.Year.HasValue)
-            {
-                throw new ArgumentException("Se debe especificar el año junto con el mes.");
-            }
-
-        // Filtro por rango de fechas si se proporciona en la solicitud
-        if (filter.StartDate.HasValue && filter.EndDate.HasValue)
+            if (filter.Year.HasValue) 
         {
-            query = query.Where(m
-                => m.OperationalDate >=
-                filter.StartDate.Value
-                && m.OperationalDate <= filter.EndDate.Value);
+            throw new InvalidOperationException("Favor ingrese el mes");
+        }
+        if (filter.Month.HasValue)
+        {
+            int year = filter.Year ?? DateTime.UtcNow.Year; 
+            int month = filter.Month.Value; 
+
+          
+            query = query.Where(x =>
+                 x.OperationalDate != null &&
+                 x.OperationalDate.Value.Year == year &&
+                 x.OperationalDate.Value.Month == month);
         }
 
-        
-            if (!string.IsNullOrEmpty(filter.Description))
-            {
-                query = query.Where(m => m.Description.Contains(filter.Description));
-            }
+        if (filter.StartDate.HasValue && filter.EndDate.HasValue)
+        {
+            query = query.Where(m => 
+            m.OperationalDate >= 
+            filter.StartDate.Value && 
+            m.OperationalDate <= 
+            filter.EndDate.Value);
+        }
 
-            // Ejecutar la consulta y obtener los resultados
-            var result = await query.ToListAsync();
+         if (filter.StartDate is not null)
+        {
+            
+            query = query.Where(m => 
+            m.OperationalDate >= 
+            filter.StartDate);
+        }
 
-            // Mapear los resultados a DTOs y devolver la lista
+         if (filter.EndDate is not null)
+        {
+            
+            query = query.Where(m => 
+            m.OperationalDate >= 
+            filter.EndDate);
+        }
+
+        if (!string.IsNullOrEmpty(filter.Description))
+        {
+            var formattedDescription = filter.Description.ToUpper(); 
+            query = query.Where(m => m.Description.ToUpper() == formattedDescription);
+        }
+
+
+        var result = await query.ToListAsync();
+
+           
             return result.Select(m => new MovementDTO
             {
                 Id = m.Id,

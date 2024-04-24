@@ -13,7 +13,7 @@ public class Extraction
 
     public DateTime? OperationalDate { get; set; } = DateTime.UtcNow;
 
-    public TransactionType TransactionType { get; set; } = TransactionType.Extraction;
+    public TransactionType TransactionType { get; set; } = TransactionType.EExtraction;
 
 
 

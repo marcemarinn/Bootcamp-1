@@ -35,16 +35,17 @@ public partial class BootcampContext : DbContext
     public virtual DbSet<Transfer> Transfers { get; set; }
     public virtual DbSet<Deposit> Deposits { get; set; }
     public virtual DbSet<Extraction> Extractions { get; set; }
-
-    
+    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<ProductRequest> ProductRequests { get; set; }
     public virtual DbSet<TransactionHistory> TransactionHistories { get; set; }
+    public virtual DbSet<TransactionLimit> TransactionLimits { get; set; }
 
 
 
 
 
 
-    //public virtual DbSet<Currency> Currency { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,6 +65,13 @@ public partial class BootcampContext : DbContext
         modelBuilder.ApplyConfiguration(new DepositConfiguration());
         modelBuilder.ApplyConfiguration(new ExtractionConfiguration());
         modelBuilder.ApplyConfiguration(new TransactionHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductRequestConfiguration());
+        modelBuilder.ApplyConfiguration(new TransactionLimitConfiguration());
+
+
+
+
 
 
 
