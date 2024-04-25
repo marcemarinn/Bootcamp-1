@@ -1,10 +1,12 @@
 ﻿using Core.Constants;
 using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces.Repositories;
 using Core.Models;
 using Core.Requests;
 using Infrastructure.Contexts;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -17,42 +19,26 @@ public class ExtractionRepository : IExtractionRepository
         _bootcampContext = bootcampContext;
     }
 
-    public async Task<ExtractionDTO> Create(ExtractionRequest request)
+    public Task<ExtractionDTO> Create(ExtractionRequest request)
     {
-        var accountId = await _bootcampContext.Accounts.FindAsync(request.AccountId);
-
-        if (accountId == null )
-        {
-            throw new ArgumentException("La cuenta no existe");
-        }
-
-        if (accountId.Balance < request.Amount)
-        {
-            throw new InvalidOperationException("El saldo de la cuenta es insuficiente para realizar la extracción.");
-        }
-
-        accountId.Balance -= request.Amount;
-
-        var extractionToCreate = new Extraction
-        {
-            AccountId = request.AccountId,
-            Amount = request.Amount,
-           
-        };
-
-        var movementToCreate = new Movement
-        {
-            AccountId = request.AccountId,
-            Amount = request.Amount,
-            OperationalDate = request.OperationalDate,
-            TransactionType = TransactionType.EExtraction
-        };
-
-        _bootcampContext.Extractions.Add(extractionToCreate);
-        _bootcampContext.Movements.Add(movementToCreate);
-
-        await _bootcampContext.SaveChangesAsync();
-
-        return extractionToCreate.Adapt<ExtractionDTO>();
+        throw new NotImplementedException();
     }
+    
+
+    public async Task<decimal?> GetOperationalLimit(int accountId)
+    {
+       
+        var account = await _bootcampContext.Accounts
+       .Where(a => a.Id == accountId)
+        .FirstAsync();
+
+        var operationalLimit = await _bootcampContext.CurrentAccounts
+             .Where(t => t.AccountId == account.Id)
+             .Select(t => t.OperationalLimit)
+             .FirstOrDefaultAsync();
+
+        return operationalLimit;
+    }
+
+    
 }

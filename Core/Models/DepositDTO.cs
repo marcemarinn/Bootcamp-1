@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.Constants;
+using Core.Entities;
 
 namespace Core.Models;
 
@@ -13,5 +14,8 @@ public class DepositDTO
     public decimal Amount { get; set; }
 
     public DateTime OperationDate { get; set; }
+
+    public TransactionType TransactionType { get; set; } = TransactionType.EDeposit;
+
 
 }

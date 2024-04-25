@@ -6,6 +6,8 @@ public class ServicePayment
     public string Description { get; set; }
     public string DocumentNumber { get; set; }
     public decimal Amount { get; set; }
+    public DateTime OperationalDate { get; set; }
+
     public int AccountId { get; set; }
     public Account Account { get; set; }
 

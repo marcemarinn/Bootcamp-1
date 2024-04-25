@@ -1,4 +1,6 @@
-﻿namespace Core.Entities;
+﻿using Core.Constants;
+
+namespace Core.Entities;
 
 public class Deposit
 {
@@ -16,5 +18,6 @@ public class Deposit
 
     public  DateTime OperationDate { get; set; }
 
+    public TransactionType TransactionType { get; set; } = TransactionType.EDeposit;
 
 }

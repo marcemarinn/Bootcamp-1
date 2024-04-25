@@ -8,8 +8,6 @@ public class ProductRequestModel
     public string Description { get; set; }
 
 
-    public DateTime ApprovalDate { get; set; }
-
     public decimal Amount { get; set; }
 
     public int LoanTerm { get; set; }

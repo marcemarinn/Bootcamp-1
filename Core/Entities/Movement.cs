@@ -12,7 +12,6 @@ public class Movement
     public int AccountId { get; set; }
     public Account Account { get; set; } = null!;
 
-    public ICollection<TransactionHistory> TransactionHistories { get; set; } = new List<TransactionHistory>();
 
 
 }

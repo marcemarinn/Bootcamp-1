@@ -18,10 +18,7 @@ public class MovementConfiguration : IEntityTypeConfiguration<Movement>
             .WithMany(x => x.Movements)
             .HasForeignKey(x => x.AccountId);
 
-        entity
-            .HasMany(m => m.TransactionHistories)
-            .WithOne(th => th.Movement)
-            .HasForeignKey(th => th.MovementId);
+        
 
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(BootcampContext))]
-    partial class BootcampContextModelSnapshot : ModelSnapshot
+    [Migration("20240424114752_AddFixToTransfer")]
+    partial class AddFixToTransfer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,6 +32,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("Balance")
                         .HasPrecision(20, 5)
@@ -60,6 +66,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("Account_pkey");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("CurrencyId");
 
@@ -379,7 +387,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("AplicationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("ApprovalDate")
+                    b.Property<DateTime>("ApprovalDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("CurrencyId")
@@ -517,9 +525,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("OperationalDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("ServiceId")
                         .HasColumnType("integer");
 
@@ -531,6 +536,68 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ServiceId");
 
                     b.ToTable("ServicePayments");
+                });
+
+            modelBuilder.Entity("Core.Entities.TransactionHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("MovementId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("OperationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id")
+                        .HasName("TransactionHistory_pkey");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("MovementId");
+
+                    b.ToTable("TransactionHistories");
+                });
+
+            modelBuilder.Entity("Core.Entities.TransactionLimit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("TransactionalLimit")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id")
+                        .HasName("TransactionLimit_pkey");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("TransactionLimits");
                 });
 
             modelBuilder.Entity("Core.Entities.Transfer", b =>
@@ -582,6 +649,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
+                    b.HasOne("Core.Entities.Account", null)
+                        .WithMany("Accounts")
+                        .HasForeignKey("AccountId");
+
                     b.HasOne("Core.Entities.Currency", "Currency")
                         .WithMany("Accounts")
                         .HasForeignKey("CurrencyId")
@@ -753,6 +824,36 @@ namespace Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("Core.Entities.TransactionHistory", b =>
+                {
+                    b.HasOne("Core.Entities.Account", "Account")
+                        .WithMany("TransactionHistories")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Movement", "Movement")
+                        .WithMany("TransactionHistories")
+                        .HasForeignKey("MovementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Movement");
+                });
+
+            modelBuilder.Entity("Core.Entities.TransactionLimit", b =>
+                {
+                    b.HasOne("Core.Entities.Account", "Account")
+                        .WithMany("TransactionLimits")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("Core.Entities.Transfer", b =>
                 {
                     b.HasOne("Core.Entities.Account", null)
@@ -786,6 +887,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
+                    b.Navigation("Accounts");
+
                     b.Navigation("CurrentAccount");
 
                     b.Navigation("Deposits");
@@ -797,6 +900,10 @@ namespace Infrastructure.Migrations
                     b.Navigation("PaymentServices");
 
                     b.Navigation("SavingAccount");
+
+                    b.Navigation("TransactionHistories");
+
+                    b.Navigation("TransactionLimits");
 
                     b.Navigation("Transfers");
 
@@ -833,6 +940,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Enterprise", b =>
                 {
                     b.Navigation("PromotionsEnterprises");
+                });
+
+            modelBuilder.Entity("Core.Entities.Movement", b =>
+                {
+                    b.Navigation("TransactionHistories");
                 });
 
             modelBuilder.Entity("Core.Entities.Product", b =>

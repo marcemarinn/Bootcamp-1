@@ -16,7 +16,7 @@ public class ProductRequestService : IProductRequestService
         _repository = repository;
     }
 
-    public async Task<ProductRequestDTO> Create(ProductRequestModel model)
+    public async Task<int> Create(ProductRequestModel model)
     {
         return  await _repository.Create(model);
     }

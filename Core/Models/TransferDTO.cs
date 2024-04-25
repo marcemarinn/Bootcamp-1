@@ -1,4 +1,6 @@
-﻿namespace Core.Models;
+﻿using Core.Constants;
+
+namespace Core.Models;
 
 public class TransferDTO
 {
@@ -14,5 +16,7 @@ public class TransferDTO
     public int SenderId { get; set; }
 
     public int ReceiverId { get; set; }
+    public TransactionType TransactionType { get; set; } = TransactionType.ETransfer;
+
 
 }

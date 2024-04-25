@@ -5,6 +5,7 @@ using Core.Models;
 using Core.Requests;
 using Infrastructure.Contexts;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -21,15 +22,22 @@ public class DepositRepository : IDepositRepository
     public async Task<DepositDTO> Create(DepositRequest request)
     {
 
-        var bankId = await _bootcampContext.Banks.FindAsync(request.BankId);
-        var accountId = await _bootcampContext.Accounts.FindAsync(request.AccountId);
+        var bankId = await _bootcampContext.Banks
+            .FindAsync(request.BankId);
+
+        var accountId = await _bootcampContext.Accounts
+            .FindAsync(request.AccountId);
+
+        var transactionType = await _bootcampContext.Accounts
+            .Where(c => c.Type == 0)
+            .Select(c => c.Type)
+            .FirstOrDefaultAsync();
 
         if (accountId == null || bankId == null)
         {
             
-            throw new ArgumentException("La cuenta o el banco especificados no existen.");
+            throw new ArgumentException("The specified account or bank does not exist.");
         }
-
        
         var depositToCreate = request.Adapt<Deposit>();
 

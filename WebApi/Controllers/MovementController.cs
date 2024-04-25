@@ -14,11 +14,10 @@ public class MovementController : BaseApiController
         _movementService = movementService;
     }
 
-    [HttpGet]
-
-
-    public async Task<IActionResult> GetFiltered([FromQuery] FilterMovementRequest filter)
+     
+    [HttpGet("{AccountId}")]
+    public async Task<IActionResult> GetFiltered([FromQuery] FilterMovementRequest filter,int accountId)
     {
-        return Ok(await _movementService.GetFiltered(filter));
+        return Ok(await _movementService.GetFiltered(filter,accountId));
     }
 }

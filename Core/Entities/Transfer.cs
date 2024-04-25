@@ -1,4 +1,6 @@
-﻿namespace Core.Entities;
+﻿using Core.Constants;
+
+namespace Core.Entities;
 
 public class Transfer
 {
@@ -19,6 +21,9 @@ public class Transfer
 
     public int ReceiverId { get; set; }
     public Account ReceiverAccount { get; set; }
+
+    public TransactionType TransactionType { get; set; } = TransactionType.ETransfer;
+
 
 
 

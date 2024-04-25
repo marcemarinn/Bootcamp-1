@@ -23,22 +23,7 @@ public class TransferService : ITransferService
     public async Task<TransferDTO> Create(TransferRequest request)
     {
 
-        var senderAccount = await _bootcampContext.Accounts.FindAsync(request.SenderId);
-        var receiverAccount = await _bootcampContext.Accounts.FindAsync(request.ReceiverId);
-        switch (GetAccountValidationStatus(senderAccount, receiverAccount, request.Amount))
-        {
-            case AccountValidationsStatus.SenderNotFound:
-                throw new Exception("senderId was not found");
-            case AccountValidationsStatus.SenderNotActive:
-                throw new Exception("Origin Account is not active");
-            case AccountValidationsStatus.SenderBalanceInsufficient:
-                throw new Exception("sender's account balance is insufficient.");
-            case AccountValidationsStatus.Success:
-                break;
-            default:
-                break;
-        }
-
+       
         return await _transferRepository.Create(request);
 
     }
@@ -49,6 +34,9 @@ public class TransferService : ITransferService
 
         if (senderAccount.IsDeleted)
             return AccountValidationsStatus.SenderNotActive;
+
+        if (senderAccount.Balance < amount)
+            return AccountValidationsStatus.SenderBalanceInsufficient;
 
         if (senderAccount.Balance < amount)
             return AccountValidationsStatus.SenderBalanceInsufficient;

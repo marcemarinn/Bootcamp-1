@@ -21,18 +21,6 @@ public class AccountRepository : IAccountRepository
 
     public async Task<AccountDTO> Create(CreateAccountRequest request)
     {
-        /*A modo de ejemplo*/
-        //#region PRUEBA
-        //var currency = new Currency()
-        //{
-        //    Name = "Dolares Americanos",
-        //    BuyValue = 10,
-        //    SellValue = 20,
-        //};
-        //_context.Currency.Add(currency);
-
-        //throw new Exception("Algo malo pasó");
-        //#endregion
 
         var account = request.Adapt<Account>();
 
@@ -44,6 +32,9 @@ public class AccountRepository : IAccountRepository
         if(account.Type == AccountType.Current)
         {
             account.CurrentAccount = request.CreateCurrentAccount.Adapt<CurrentAccount>();
+            
+
+
         }
 
         _context.Accounts.Add(account);

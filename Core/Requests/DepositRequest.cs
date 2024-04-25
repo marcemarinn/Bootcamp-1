@@ -1,4 +1,6 @@
-﻿namespace Core.Requests;
+﻿using Core.Constants;
+
+namespace Core.Requests;
 
 public class DepositRequest
 {
@@ -9,5 +11,8 @@ public class DepositRequest
     public decimal Amount { get; set; }
 
     public DateTime OperationDate { get; set; }
+
+
+    public TransactionType TransactionType { get; set; }
 
 }

@@ -10,7 +10,7 @@ public class ProductRequest
 
     public DateTime AplicationDate { get; set; }
 
-    public DateTime ApprovalDate { get; set; }
+    public DateTime? ApprovalDate { get; set; }
 
     public decimal Amount { get; set; }
 

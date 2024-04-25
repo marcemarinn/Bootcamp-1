@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(BootcampContext))]
-    partial class BootcampContextModelSnapshot : ModelSnapshot
+    [Migration("20240424222612_Fix18")]
+    partial class Fix18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,6 +32,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("Balance")
                         .HasPrecision(20, 5)
@@ -60,6 +66,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("Account_pkey");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("CurrencyId");
 
@@ -517,9 +525,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("OperationalDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("ServiceId")
                         .HasColumnType("integer");
 
@@ -582,6 +587,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
+                    b.HasOne("Core.Entities.Account", null)
+                        .WithMany("Accounts")
+                        .HasForeignKey("AccountId");
+
                     b.HasOne("Core.Entities.Currency", "Currency")
                         .WithMany("Accounts")
                         .HasForeignKey("CurrencyId")
@@ -786,6 +795,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
+                    b.Navigation("Accounts");
+
                     b.Navigation("CurrentAccount");
 
                     b.Navigation("Deposits");

@@ -18,7 +18,7 @@ public class ProductRequestRepository : IProductRequestRepository
 
 
 
-    public async Task<ProductRequestDTO> Create(ProductRequestModel request)
+    public async Task<int> Create(ProductRequestModel request)
     {
         var productRequestToCreate =  request.Adapt<ProductRequest>();
 
@@ -31,8 +31,8 @@ public class ProductRequestRepository : IProductRequestRepository
 
         _bootcampContext.ProductRequests.Add(productRequestToCreate);
         await _bootcampContext.SaveChangesAsync();
-        
 
-        return productRequestToCreate.Adapt<ProductRequestDTO>();
+
+        return productRequestToCreate.Id;
     }
 }

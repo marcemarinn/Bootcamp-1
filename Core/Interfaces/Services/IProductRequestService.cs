@@ -5,6 +5,6 @@ namespace Core.Interfaces.Services;
 
 public interface IProductRequestService
 {
-    Task <ProductRequestDTO> Create(ProductRequestModel model);
+    Task <int> Create(ProductRequestModel model);
 
 }
