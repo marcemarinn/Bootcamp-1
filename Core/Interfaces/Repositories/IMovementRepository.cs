@@ -5,7 +5,7 @@ namespace Core.Interfaces.Repositories;
 
 public interface IMovementRepository
 {
-    Task<List<MovementDTO>> GetFiltered(FilterMovementRequest filter, int accountId);
+    Task<List<MovementDTO>> GetFiltered(FilterMovementRequest filter);
 
 
 }

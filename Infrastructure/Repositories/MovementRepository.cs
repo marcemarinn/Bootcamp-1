@@ -15,65 +15,75 @@ public class MovementRepository : IMovementRepository
         _bootcampContext = bootcampContext;
     }
 
-    public async Task<List<MovementDTO>> GetFiltered(FilterMovementRequest filter, int accountId)
+    public async Task<List<MovementDTO>> GetFiltered(FilterMovementRequest filter)
     {
-        
-            var query = _bootcampContext.Movements
-                            .Include(m => m.Account)
-                            .AsQueryable();
 
-            query = query.Where(m => m.AccountId == accountId);
+        var query = _bootcampContext.Movements
+                        .Include(m => m.Account)
+                        .AsQueryable();
 
 
-
-
-        if (filter.Year != null && filter.Month == null)
-           throw new InvalidOperationException("You must specify the month along with the year.");
-
-
-        if (filter.Month != null)
+        if (filter.AccountId == null) { 
         {
-            int month = filter.Month.Value;
-            query = query.Where(x =>
-                x.OperationalDate != null &&
-                x.OperationalDate.Value.Month == month);
+            throw new ArgumentException("Account ID is required.");
         }
 
-        if (filter.Year != null)        
-            query = query.Where(x =>
-                x.OperationalDate != null &&
-                x.OperationalDate.Value.Year == filter.Year);
-        
-
-
-        if (filter.StartDate.HasValue && filter.EndDate.HasValue)
-            query = query.Where(m => 
-            m.OperationalDate >= 
-            filter.StartDate.Value && 
-            m.OperationalDate <= 
-            filter.EndDate.Value);
-        
-
-         if (filter.StartDate is not null)
-
-            query = query.Where(m => 
-            m.OperationalDate >= 
-            filter.StartDate);
-
-
-         if (filter.EndDate is not null)
-
-            query = query.Where(m => 
-            m.OperationalDate >= 
-            filter.EndDate);
-
-
-        if (!string.IsNullOrEmpty(filter.Description))
+        if (filter.AccountId > 0)
         {
-            var formattedDescription = filter.Description.ToUpper(); 
-            query = query.Where(m => m.Description.ToUpper() == formattedDescription);
+            query = query.Where(m => m
+        .AccountId == filter.AccountId);
+
+        }
         }
 
+            if (filter.Year != null && filter.Month == null )
+                throw new InvalidOperationException("You must specify the month along with the year.");
+
+
+            if (filter.Month != null)
+            {
+                int month = filter.Month.Value;
+                query = query.Where(x =>
+                    x.OperationalDate != null &&
+                    x.OperationalDate.Value.Month == month);
+            }
+
+            if (filter.Year != null)
+                query = query.Where(x =>
+                    x.OperationalDate != null &&
+                    x.OperationalDate.Value.Year == filter.Year);
+
+
+
+            if (filter.StartDate.HasValue && filter.EndDate.HasValue)
+                query = query.Where(m =>
+                m.OperationalDate >=
+                filter.StartDate.Value &&
+                m.OperationalDate <=
+                filter.EndDate.Value);
+
+
+            if (filter.StartDate is not null)
+
+                query = query.Where(m =>
+                m.OperationalDate >=
+                filter.StartDate);
+
+
+            if (filter.EndDate is not null)
+
+                query = query.Where(m =>
+                m.OperationalDate >=
+                filter.EndDate);
+
+
+            if (filter.Description != null )
+            {
+                var formattedDescription = filter.Description.ToLower();
+                query = query.Where(m => !string.IsNullOrEmpty(m.Description) && m.Description.ToLower() == formattedDescription);
+            }
+
+        
         var result = await query.ToListAsync();
 
            

@@ -7,6 +7,7 @@ using Core.Requests;
 using Infrastructure.Contexts;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Infrastructure.Repositories;
@@ -31,34 +32,64 @@ public class TransferRepository : ITransferRepository
 
         var senderAccount = await _bootcampContext.Accounts.FindAsync(request.SenderId);
         var receiverAccount = await _bootcampContext.Accounts.FindAsync(request.ReceiverId);
+        var receiverBank = await _bootcampContext.Accounts.FindAsync(request.ReceiverBankId);
+        var senderBank = await _bootcampContext.Accounts.FindAsync(request.SenderId);
 
-        if (senderAccount == null || receiverAccount == null)
+
+
+        if (senderBank == receiverBank)
         {
-            throw new Exception("One or both accounts were not found.");
+
+            if (senderAccount == null || receiverAccount == null)
+            {
+                throw new Exception("One or both accounts were not found.");
+            }
+
+            if (senderAccount.Type != receiverAccount.Type)
+            {
+                throw new NotFoundException("The accounts are not of the same type ");
+            }
+
+            if (senderAccount.Currency != receiverAccount.Currency)
+            {
+                throw new NotFoundException("The accounts do not have the same currency.");
+            }
+
+
+            if (request.Amount > senderAccount.Balance)
+            {
+                throw new NotFoundException("The transfer amount is greater than the current balance of the originating account.");
+            }
+
+
+            if (senderAccount.IsDeleted)
+            {
+                throw new NotFoundException("The source account is not active.");
+            }
+
+
+            senderAccount.Balance -= request.Amount;
+            receiverAccount.Balance += request.Amount;
+
         }
 
-        if (senderAccount.Type != receiverAccount.Type || senderAccount.Currency != receiverAccount.Currency)
+        if (senderBank != receiverBank)
         {
-            throw new NotFoundException("The accounts are not of the same type or do not have the same currency.");
+
+
+
         }
 
-    
-        if (request.Amount > senderAccount.Balance)
-        {
-            throw new NotFoundException("The transfer amount is greater than the current balance of the originating account.");
-        }
+            var movementToCreate = new Movement
+            {
+            AccountId = request.SenderId,
+            Amount = request.Amount,
+            OperationalDate = request.TransferDateTime,
+            Description = request.Description,
+            TransactionType = TransactionType.EServicePayment
+            };
 
-    
-        if (senderAccount.IsDeleted)
-        {
-            throw new NotFoundException("The source account is not active.");
-        }
-
-
-        senderAccount.Balance -= request.Amount;
-        receiverAccount.Balance += request.Amount;
-
-      
+        _bootcampContext.Movements.Add(movementToCreate);
         _bootcampContext.Transfers.Add(transferToCreate);
         await _bootcampContext.SaveChangesAsync();
 

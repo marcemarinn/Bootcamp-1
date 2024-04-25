@@ -14,8 +14,8 @@ public class MovementService : IMovementService
         _repository = repository;
     }
 
-    public async Task<List<MovementDTO>> GetFiltered(FilterMovementRequest filter,int accountId)
+    public async Task<List<MovementDTO>> GetFiltered(FilterMovementRequest filter)
     {
-        return await _repository.GetFiltered(filter,accountId);
+        return await _repository.GetFiltered(filter);
     }
 }

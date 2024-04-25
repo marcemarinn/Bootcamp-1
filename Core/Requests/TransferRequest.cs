@@ -5,10 +5,10 @@ namespace Core.Requests;
 public class TransferRequest
 {
 
-    public Decimal Amount { get; set; }
+    public decimal Amount { get; set; }
     public string Description { get; set; }
 
-    public int bankId { get; set; }
+    public int SenderBankId { get; set; }
     public DateTime TransferDateTime { get; set; }
 
     public int CurrencyId { get; set; }
@@ -18,7 +18,4 @@ public class TransferRequest
     public int ReceiverId { get; set; }
 
     public int ReceiverBankId { get; set; }
-
-    public TransactionType TransactionType { get; set; } = TransactionType.ETransfer;
-
 }

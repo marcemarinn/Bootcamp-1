@@ -32,9 +32,7 @@ public class AccountRepository : IAccountRepository
         if(account.Type == AccountType.Current)
         {
             account.CurrentAccount = request.CreateCurrentAccount.Adapt<CurrentAccount>();
-            
-
-
+ 
         }
 
         _context.Accounts.Add(account);

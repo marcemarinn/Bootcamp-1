@@ -6,7 +6,7 @@ namespace Core.Interfaces.Services;
 
 public interface IMovementService
 {
-    Task<List<MovementDTO>> GetFiltered(FilterMovementRequest filter, int accountId);
+    Task<List<MovementDTO>> GetFiltered(FilterMovementRequest filter);
 
 
 }

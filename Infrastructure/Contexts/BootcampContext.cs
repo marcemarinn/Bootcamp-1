@@ -68,13 +68,6 @@ public partial class BootcampContext : DbContext
 
 
 
-
-
-
-
-
-
-
         OnModelCreatingPartial(modelBuilder);
     }
 
