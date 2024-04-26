@@ -23,10 +23,16 @@ public class ProductRequestRepository : IProductRequestRepository
         var productRequestToCreate =  request.Adapt<ProductRequest>();
 
         var productId = await _bootcampContext.Products.FindAsync(request.ProductId);
+        var currencyId = await _bootcampContext.Currencies.FindAsync(request.CurrencyId);
 
         if (productId == null)
         {
             throw new Exception("El ID de producto proporcionado no existe.");
+        }
+
+        if (currencyId == null)
+        {
+            throw new Exception("El ID de la moneda proporcionado no existe.");
         }
 
         _bootcampContext.ProductRequests.Add(productRequestToCreate);

@@ -1,4 +1,6 @@
-﻿using Core.Interfaces.Services;
+﻿using Core.Entities;
+using Core.Interfaces.Services;
+using Core.Models;
 using Core.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,5 +20,12 @@ public class CustomerController : BaseApiController
     {
         var customers = await _customerService.GetFiltered(filter);
         return Ok(customers);
+    }
+
+    [HttpGet("all")]
+    public async Task <List<CustomerDTO>> GetAll()
+    {
+
+        return await _customerService.GetAll();
     }
 }

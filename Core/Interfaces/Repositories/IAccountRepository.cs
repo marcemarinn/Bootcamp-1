@@ -5,6 +5,9 @@ namespace Core.Interfaces.Repositories;
 
 public interface IAccountRepository
 {
-    Task<AccountDTO> Create(CreateAccountRequest request);
+    Task<int> Create(CreateAccountRequest request);
     Task<AccountDTO> GetById(int id);
+    Task<List<AccountDTO>> GetAll();
+
+
 }

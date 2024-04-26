@@ -2,6 +2,7 @@
 using Core.Models;
 using Core.Requests;
 using Infrastructure.Contexts;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
@@ -59,8 +60,12 @@ public class CustomerRepository : ICustomerRepository
         }).ToList();
     }
 
-    public Task<List<CustomerDTO>> GetFiltered(FilterMovementRequest filter)
+    public async Task<List<CustomerDTO>> GetAll()
     {
-        throw new NotImplementedException();
+        var customers = await _context.Customers.ToListAsync();
+
+        var customerDTO = customers.Adapt<List<CustomerDTO>>();
+
+        return customerDTO;
     }
 }

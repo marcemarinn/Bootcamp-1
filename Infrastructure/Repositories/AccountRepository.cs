@@ -19,7 +19,7 @@ public class AccountRepository : IAccountRepository
         _context = context;
     }
 
-    public async Task<AccountDTO> Create(CreateAccountRequest request)
+    public async Task<int> Create(CreateAccountRequest request)
     {
 
         var account = request.Adapt<Account>();
@@ -34,11 +34,6 @@ public class AccountRepository : IAccountRepository
             account.CurrentAccount = request.CreateCurrentAccount.Adapt<CurrentAccount>();
  
         }
-
-        _context.Accounts.Add(account);
-
-        await _context.SaveChangesAsync();
-
         var createdAccount = await _context.Accounts
             .Include(a => a.Currency)
             .Include(a => a.Customer)
@@ -46,20 +41,32 @@ public class AccountRepository : IAccountRepository
             .Include(a => a.CurrentAccount)
             .FirstOrDefaultAsync(a => a.Id == account.Id);
 
-        return createdAccount.Adapt<AccountDTO>();
+        _context.Accounts.Add(account);
+
+        await _context.SaveChangesAsync();
+
+        
+
+        return account.Id;
+    }
+
+    public async Task<List<AccountDTO>> GetAll()
+    {
+        var accounts = await _context.Accounts.ToListAsync();
+
+        var accountDTO = accounts.Adapt<List<AccountDTO>>();
+
+        return accountDTO;
     }
 
     public async Task<AccountDTO> GetById(int id)
     {
-        var account = await _context.Accounts
-            .Include(a => a.Currency)
-            .Include(a => a.Customer)
-            .Include(a => a.SavingAccount)
-            .Include(a => a.CurrentAccount)
-            .FirstOrDefaultAsync(x => x.Id == id);
+        var account = await _context.Accounts.FindAsync(id);
 
         if (account is null) throw new NotFoundException($"The account with id: {id} doest not exist");
 
         return account.Adapt<AccountDTO>();
+
+       
     }
 }

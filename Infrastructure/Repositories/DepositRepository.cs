@@ -30,7 +30,12 @@ public class DepositRepository : IDepositRepository
 
         if (accountId == null || bankId == null)
         {
-            throw new ArgumentException("The specified account or bank does not exist.");
+            throw new NotFoundException("The specified account or bank does not exist.");
+        }
+
+        if (accountId.Balance < 0)
+        {
+            throw new NotFoundException("The specified account does have enough balance");
         }
 
         DateTime dateStartMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);

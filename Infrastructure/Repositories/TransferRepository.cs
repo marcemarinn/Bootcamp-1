@@ -32,32 +32,7 @@ public class TransferRepository : ITransferRepository
         var senderAccount = await _bootcampContext.Accounts.FindAsync(request.SenderId);
         var receiverAccount = await _bootcampContext.Accounts.FindAsync(request.ReceiverId);
 
-        var senderBankId = await _bootcampContext.Customers
-         .Where(c => c.Id == senderAccount.CustomerId)
-         .Select(c => c.BankId)
-         .FirstOrDefaultAsync();
 
-        var receiverBankId = await _bootcampContext.Customers
-            .Where(c => c.Id == receiverAccount.CustomerId)
-            .Select(c => c.BankId)
-            .FirstOrDefaultAsync();
-
-        var receiverBank = await _bootcampContext.Banks.FindAsync(receiverBankId);
-
-        if (senderBankId != receiverBankId)
-        {
-            var externalAccount = new ExternalAccount
-            {
-                DocumentNumber = request.DocumentNumber,
-                BankId = request.BankId,
-                NumberAccount = request.NumberAccount,
-                CurrencyId = request.CurrencyId
-            };
-            _bootcampContext.ExternalAccounts.Add(externalAccount);
-
-            senderAccount.Balance -= request.Amount;
-            receiverAccount.Balance += request.Amount;
-        }
         if (senderAccount == null || receiverAccount == null)
         {
             throw new Exception("One or both accounts were not found.");
@@ -88,6 +63,49 @@ public class TransferRepository : ITransferRepository
             throw new NotFoundException("The source account is not active.");
         }
 
+       
+
+
+        var senderBankId = await _bootcampContext.Customers
+         .Where(c => c.Id == senderAccount.CustomerId)
+         .Select(c => c.BankId)
+         .FirstOrDefaultAsync();
+
+        var receiverBankId = await _bootcampContext.Customers
+            .Where(c => c.Id == receiverAccount.CustomerId)
+            .Select(c => c.BankId)
+            .FirstOrDefaultAsync();
+
+        if (senderBankId == receiverBankId)
+        {
+
+            senderAccount.Balance -= request.Amount;
+            receiverAccount.Balance += request.Amount;
+
+            _bootcampContext.Transfers.Add(transferToCreate);
+        }
+
+
+        var receiverBank = await _bootcampContext.Banks.FindAsync(receiverBankId);
+
+        if (senderBankId != receiverBankId)
+        {
+            var externalAccount = new ExternalAccount
+            {
+                DocumentNumber = request.DocumentNumber,
+                BankId = request.BankId,
+                NumberAccount = request.NumberAccount,
+                CurrencyId = request.CurrencyId
+            };
+            _bootcampContext.ExternalAccounts.Add(externalAccount);
+
+            senderAccount.Balance -= request.Amount;
+            receiverAccount.Balance += request.Amount;
+
+            
+        }
+        
+
         
         var movementToCreate = new Movement
         {
@@ -99,7 +117,7 @@ public class TransferRepository : ITransferRepository
         };
 
         _bootcampContext.Movements.Add(movementToCreate);
-        _bootcampContext.Transfers.Add(transferToCreate);
+        
 
         await _bootcampContext.SaveChangesAsync();
 

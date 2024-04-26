@@ -20,4 +20,8 @@ public class AccountController : BaseApiController
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateAccountRequest request)
         => Ok(await _accountService.Create(request));
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+      => Ok(await _accountService.GetAll());
 }

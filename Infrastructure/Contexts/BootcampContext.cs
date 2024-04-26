@@ -38,6 +38,8 @@ public partial class BootcampContext : DbContext
     public virtual DbSet<Deposit> Deposits { get; set; }
     public virtual DbSet<Extraction> Extractions { get; set; }
     public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<Currency> Currencies { get; set; }
+
     public virtual DbSet<ProductRequest> ProductRequests { get; set; }
 
 

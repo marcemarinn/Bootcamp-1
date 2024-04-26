@@ -20,15 +20,14 @@ public class AccountService : IAccountService
 
     }
 
-    public AccountService(IAccountRepository repository)
-    {
-        _repository = repository;
-    }
 
-    public async Task<AccountDTO> Create(CreateAccountRequest request) 
+    public async Task<int> Create(CreateAccountRequest request) 
         => await _repository.Create(request);
 
     public async Task<AccountDTO> GetById(int id) => await _repository.GetById(id);
 
-    
+    public async  Task<List<AccountDTO>> GetAll()
+    {
+        return await _repository.GetAll();
+    }
 }

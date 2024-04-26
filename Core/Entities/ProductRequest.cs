@@ -22,6 +22,7 @@ public class ProductRequest
 
     public Currency Currency { get; set; }
 
+
     public int ProductId { get; set; }
 
     public Product Product { get; set; }

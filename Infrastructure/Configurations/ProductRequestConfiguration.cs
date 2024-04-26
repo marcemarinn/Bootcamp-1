@@ -23,6 +23,10 @@ public class ProductRequestConfiguration : IEntityTypeConfiguration<ProductReque
               .WithMany(c => c.ProductsRequest)
               .HasForeignKey(pr => pr.CustomerId);
 
+        entity.HasOne(pr => pr.Currency)
+              .WithMany(c => c.ProductRequests)
+              .HasForeignKey(pr => pr.CurrencyId);
+
 
 
 

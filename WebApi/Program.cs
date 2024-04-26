@@ -17,11 +17,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddWebApi(builder.Configuration);
 
-//builder.WebHost.ConfigureKestrel(serverOptions => 
-//{
-//    serverOptions.ListenAnyIP(5000);
-    
-//});
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5000);
+
+});
 
 var app = builder.Build();
 

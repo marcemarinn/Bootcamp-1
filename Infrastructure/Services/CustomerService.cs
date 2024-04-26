@@ -18,4 +18,11 @@ public class CustomerService : ICustomerService
     {
         return await _repository.GetFiltered(filter);
     }
+
+    public async Task<List<CustomerDTO>> GetAll()
+    {
+        return await _repository.GetAll();
+
+    }
+
 }

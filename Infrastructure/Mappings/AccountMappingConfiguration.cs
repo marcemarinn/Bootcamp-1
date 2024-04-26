@@ -33,8 +33,8 @@ public class AccountMappingConfiguration : IRegister
             .Map(dest => dest.Type, src => src.Type)
             .Map(dest => dest.Balance, src => src.Balance)
             .Map(dest => dest.Status, src => src.Status.ToString())
-            .Map(dest => dest.Currency, src => src.Currency)
-            .Map(dest => dest.Customer, src => src.Customer)
+            .Map(dest => dest.CurrencyId, src => src.CurrencyId)
+            .Map(dest => dest.CustomerId, src => src.CustomerId)
             .Map(dest => dest.SavingAccount, src =>
                 src.SavingAccount != null
                 ? src.SavingAccount
