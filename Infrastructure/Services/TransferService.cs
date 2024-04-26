@@ -27,22 +27,7 @@ public class TransferService : ITransferService
         return await _transferRepository.Create(request);
 
     }
-    public AccountValidationsStatus GetAccountValidationStatus(Account senderAccount, Account receiverAccount, decimal amount)
-    {
-        if (senderAccount is null)
-            return AccountValidationsStatus.SenderNotFound;
-
-        if (senderAccount.IsDeleted)
-            return AccountValidationsStatus.SenderNotActive;
-
-        if (senderAccount.Balance < amount)
-            return AccountValidationsStatus.SenderBalanceInsufficient;
-
-        if (senderAccount.Balance < amount)
-            return AccountValidationsStatus.SenderBalanceInsufficient;
-
-        return AccountValidationsStatus.Success;
-    }
+   
 
 
 

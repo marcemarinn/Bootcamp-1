@@ -66,6 +66,20 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProductName = table.Column<string>(type: "text", nullable: false),
+                    Brand = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("Products_pkey", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Promotions",
                 columns: table => new
                 {
@@ -94,6 +108,34 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExternalAccounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DocumentNumber = table.Column<string>(type: "text", nullable: false),
+                    BankId = table.Column<int>(type: "integer", nullable: false),
+                    NumberAccount = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExternalAccounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExternalAccounts_Banks_BankId",
+                        column: x => x.BankId,
+                        principalTable: "Banks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExternalAccounts_Currency_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currency",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
@@ -107,7 +149,8 @@ namespace Infrastructure.Migrations
                     Phone = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     CustomerStatus = table.Column<int>(type: "integer", nullable: false),
                     BankId = table.Column<int>(type: "integer", nullable: false),
-                    Birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    Birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -118,6 +161,11 @@ namespace Infrastructure.Migrations
                         principalTable: "Banks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Customers_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -157,17 +205,11 @@ namespace Infrastructure.Migrations
                     Status = table.Column<int>(type: "integer", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CurrencyId = table.Column<int>(type: "integer", nullable: false),
-                    CustomerId = table.Column<int>(type: "integer", nullable: false),
-                    AccountId = table.Column<int>(type: "integer", nullable: true)
+                    CustomerId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("Account_pkey", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Accounts_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Accounts_Currency_CurrencyId",
                         column: x => x.CurrencyId,
@@ -178,6 +220,45 @@ namespace Infrastructure.Migrations
                         name: "FK_Accounts_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    AplicationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ApprovalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    LoanTerm = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ProductsRequest_pkey", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductRequests_Currency_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currency",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductRequests_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductRequests_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -213,7 +294,8 @@ namespace Infrastructure.Migrations
                     AccountId = table.Column<int>(type: "integer", nullable: false),
                     BankId = table.Column<int>(type: "integer", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    OperationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    OperationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TransactionType = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -313,6 +395,7 @@ namespace Infrastructure.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     DocumentNumber = table.Column<string>(type: "text", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    OperationalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     AccountId = table.Column<int>(type: "integer", nullable: false),
                     ServiceId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -340,11 +423,15 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    AccountNumber = table.Column<string>(type: "text", nullable: false),
+                    DocumentNumber = table.Column<string>(type: "text", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     TransferDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CurrencyId = table.Column<int>(type: "integer", nullable: false),
+                    ExternalAccountId = table.Column<int>(type: "integer", nullable: true),
                     SenderId = table.Column<int>(type: "integer", nullable: false),
                     ReceiverId = table.Column<int>(type: "integer", nullable: false),
+                    TransactionType = table.Column<int>(type: "integer", nullable: false),
                     AccountId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -373,42 +460,12 @@ namespace Infrastructure.Migrations
                         principalTable: "Currency",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TransactionHistories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    AccountId = table.Column<int>(type: "integer", nullable: false),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    TransactionType = table.Column<int>(type: "integer", nullable: false),
-                    OperationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    MovementId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("TransactionHistory_pkey", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TransactionHistories_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TransactionHistories_Movements_MovementId",
-                        column: x => x.MovementId,
-                        principalTable: "Movements",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Transfers_ExternalAccounts_ExternalAccountId",
+                        column: x => x.ExternalAccountId,
+                        principalTable: "ExternalAccounts",
+                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Accounts_AccountId",
-                table: "Accounts",
-                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_CurrencyId",
@@ -437,6 +494,11 @@ namespace Infrastructure.Migrations
                 column: "BankId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Customers_ProductId",
+                table: "Customers",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Deposits_AccountId",
                 table: "Deposits",
                 column: "AccountId");
@@ -445,6 +507,16 @@ namespace Infrastructure.Migrations
                 name: "IX_Deposits_BankId",
                 table: "Deposits",
                 column: "BankId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalAccounts_BankId",
+                table: "ExternalAccounts",
+                column: "BankId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalAccounts_CurrencyId",
+                table: "ExternalAccounts",
+                column: "CurrencyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Extractions_AccountId",
@@ -460,6 +532,21 @@ namespace Infrastructure.Migrations
                 name: "IX_Movements_AccountId",
                 table: "Movements",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductRequests_CurrencyId",
+                table: "ProductRequests",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductRequests_CustomerId",
+                table: "ProductRequests",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductRequests_ProductId",
+                table: "ProductRequests",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PromotionEnterprises_EnterpriseId",
@@ -483,16 +570,6 @@ namespace Infrastructure.Migrations
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransactionHistories_AccountId",
-                table: "TransactionHistories",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TransactionHistories_MovementId",
-                table: "TransactionHistories",
-                column: "MovementId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Transfers_AccountId",
                 table: "Transfers",
                 column: "AccountId");
@@ -501,6 +578,11 @@ namespace Infrastructure.Migrations
                 name: "IX_Transfers_CurrencyId",
                 table: "Transfers",
                 column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transfers_ExternalAccountId",
+                table: "Transfers",
+                column: "ExternalAccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transfers_ReceiverId",
@@ -526,6 +608,12 @@ namespace Infrastructure.Migrations
                 name: "Extractions");
 
             migrationBuilder.DropTable(
+                name: "Movements");
+
+            migrationBuilder.DropTable(
+                name: "ProductRequests");
+
+            migrationBuilder.DropTable(
                 name: "PromotionEnterprises");
 
             migrationBuilder.DropTable(
@@ -533,9 +621,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ServicePayments");
-
-            migrationBuilder.DropTable(
-                name: "TransactionHistories");
 
             migrationBuilder.DropTable(
                 name: "Transfers");
@@ -550,19 +635,22 @@ namespace Infrastructure.Migrations
                 name: "Services");
 
             migrationBuilder.DropTable(
-                name: "Movements");
-
-            migrationBuilder.DropTable(
                 name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "Currency");
+                name: "ExternalAccounts");
 
             migrationBuilder.DropTable(
                 name: "Customers");
 
             migrationBuilder.DropTable(
+                name: "Currency");
+
+            migrationBuilder.DropTable(
                 name: "Banks");
+
+            migrationBuilder.DropTable(
+                name: "Products");
         }
     }
 }

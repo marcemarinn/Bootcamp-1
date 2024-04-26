@@ -25,6 +25,8 @@ public partial class BootcampContext : DbContext
     public virtual DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<CurrentAccount> CurrentAccounts { get; set; }
+    public virtual DbSet<ExternalAccount> ExternalAccounts { get; set; }
+
 
     public virtual DbSet<Movement> Movements { get; set; }
     public virtual DbSet<Promotion> Promotions { get; set; }
@@ -37,6 +39,7 @@ public partial class BootcampContext : DbContext
     public virtual DbSet<Extraction> Extractions { get; set; }
     public virtual DbSet<Product> Products { get; set; }
     public virtual DbSet<ProductRequest> ProductRequests { get; set; }
+
 
 
 

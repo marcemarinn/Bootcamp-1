@@ -9,7 +9,7 @@ public class Movement
     public string? Description { get; set; }
     public DateTime? OperationalDate { get; set; } 
     public TransactionType TransactionType { get; set; }
-    public int AccountId { get; set; }
+    public int? AccountId { get; set; }
     public Account Account { get; set; } = null!;
 
 

@@ -10,7 +10,7 @@ public class MovementDTO
     public string? Description { get; set; }
     public DateTime? OperationalDate { get; set; } 
     public TransactionType TransactionType { get; set; }
-    public int AccountId { get; set; }
+    public int? AccountId { get; set; }
 
 
 }

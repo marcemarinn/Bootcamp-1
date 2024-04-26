@@ -54,7 +54,7 @@ public static class DependencyInjection
         services.AddScoped<ITransferRepository, TransferRepository>();
         services.AddScoped<IMovementRepository, MovementRepository>();
         services.AddScoped<IProductRequestRepository, ProductRequestRepository>();
-
+     
 
 
 

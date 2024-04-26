@@ -38,10 +38,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .Property(e => e.Phone)
             .HasMaxLength(200);
 
-        entity
-            .HasOne(d => d.Bank)
-            .WithMany(p => p.Customers)
-            .HasForeignKey(d => d.BankId);
+       
 
         entity
             .HasMany(d => d.Accounts)

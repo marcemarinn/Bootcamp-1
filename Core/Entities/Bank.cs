@@ -10,6 +10,7 @@ public class Bank
     public virtual ICollection<Bank> Banks { get; set; } = new List<Bank>();
     public virtual ICollection<Deposit> Deposits { get; set; } = new List<Deposit>();
     public virtual ICollection<Extraction> Extractions { get; set; } = new List<Extraction>();
+    public virtual ICollection<ExternalAccount> ExternalAccounts { get; set; } = new List<ExternalAccount>();
 
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 }

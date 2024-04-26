@@ -14,9 +14,14 @@ public class TransferConfiguration : IRegister
              .Map(dest => dest.Amount, src => src.Amount)
              .Map(dest => dest.Description, src => src.Description)
              .Map(dest => dest.TransferDateTime, src => src.TransferDateTime)
-             .Map(dest => dest.CurrencyId, src => src.CurrencyId)
              .Map(dest => dest.SenderId, src => src.SenderId)
              .Map(dest => dest.ReceiverId, src => src.ReceiverId);
+
+        config.NewConfig<ExternalAccountRequest, ExternalAccount>()
+       .Map(dest => dest.CurrencyId, src => src.CurrencyId)
+       .Map(dest => dest.BankId, src => src.BankId)
+       .Map(dest => dest.DocumentNumber, src => src.DocumentNumber)
+       .Map(dest => dest.NumberAccount, src => src.NumberAccount);
 
         config.NewConfig<Transfer, TransferDTO>()
             .Map(dest => dest.Id, src => src.Id)
