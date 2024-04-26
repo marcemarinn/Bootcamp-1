@@ -35,15 +35,15 @@ public class ExtractionService : IExtractionService
             throw new NotFoundException("The account does not exist");
 
 
-        if (account.Balance < request.Amount)
-            throw new InvalidOperationException("The account balance is insufficient ");
+        if (account.Balance < request.Amount )
+            throw new NotFoundException("The account balance is insufficient ");
 
-        var operationalLimit = await _extractionRepository.GetOperationalLimit(request.AccountId);
+        //var operationalLimit = await _extractionRepository.GetOperationalLimit(request.AccountId);
 
-        if (operationalLimit.HasValue && request.Amount > operationalLimit.Value)
-        {
-            throw new InvalidOperationException("El monto de extracción supera el límite operacional");
-        }
+        //if (operationalLimit.HasValue && request.Amount > operationalLimit.Value)
+        //{
+        //    throw new InvalidOperationException("El monto de extracción supera el límite operacional");
+        //}
 
         account.Balance -= request.Amount;
 

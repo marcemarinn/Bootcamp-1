@@ -27,6 +27,9 @@ public class DepositRepository : IDepositRepository
        
         var bankId = await _bootcampContext.Banks.FindAsync(request.BankId);
         var accountId = await _bootcampContext.Accounts.FindAsync(request.AccountId);
+        DateTime operationDate = request.OperationDate.ToUniversalTime();
+
+
 
         if (accountId == null || bankId == null)
         {
@@ -52,10 +55,27 @@ public class DepositRepository : IDepositRepository
             .Select(t => t.OperationalLimit)
             .FirstOrDefaultAsync();
 
-        if (newTotalMovementsInMonth > operationalLimit)
+
+        if (operationDate.Month != DateTime.UtcNow.Month)
         {
-            throw new NotFoundException("The account has reached the operational limit");
+            if (newTotalMovementsInMonth > operationalLimit)
+            {
+                await _bootcampContext.Movements.AddAsync(new Movement
+                {
+                    AccountId = accountId.Id,
+                    Amount = request.Amount,
+                    OperationalDate = operationDate 
+                });
+
+                await _bootcampContext.SaveChangesAsync();
+            }
         }
+        else { throw new NotFoundException("The account has reached the operational limit"); }
+       
+           
+        
+
+
 
         var depositToCreate = request.Adapt<Deposit>();
 
