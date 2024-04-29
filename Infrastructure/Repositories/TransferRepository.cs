@@ -35,12 +35,7 @@ public class TransferRepository : ITransferRepository
 
         if (senderAccount == null || receiverAccount == null)
         {
-            throw new Exception("One or both accounts were not found.");
-        }
-
-        if (senderAccount == receiverAccount)
-        {
-            throw new Exception("Sender and receiver accounts cannot be the same.");
+            throw new NotFoundException("One or both accounts were not found.");
         }
 
         if (senderAccount.Type != receiverAccount.Type)
@@ -48,7 +43,7 @@ public class TransferRepository : ITransferRepository
             throw new NotFoundException("The accounts are not of the same type.");
         }
 
-        if (senderAccount.Currency != receiverAccount.Currency)
+        if (senderAccount.CurrencyId != receiverAccount.CurrencyId)
         {
             throw new NotFoundException("The accounts do not have the same currency.");
         }
@@ -58,12 +53,12 @@ public class TransferRepository : ITransferRepository
             throw new NotFoundException("The transfer amount is greater than the current balance of the originating account.");
         }
 
-        if (senderAccount.IsDeleted)
+        if (receiverAccount.IsDeleted)
         {
-            throw new NotFoundException("The source account is not active.");
+            throw new NotFoundException("The receiver account is not active.");
         }
 
-       
+        
 
 
         var senderBankId = await _bootcampContext.Customers
@@ -84,7 +79,7 @@ public class TransferRepository : ITransferRepository
 
             _bootcampContext.Transfers.Add(transferToCreate);
         }
-
+        else { 
 
         var receiverBank = await _bootcampContext.Banks.FindAsync(receiverBankId);
 
@@ -104,9 +99,9 @@ public class TransferRepository : ITransferRepository
 
             
         }
-        
+        }
 
-        
+
         var movementToCreate = new Movement
         {
             AccountId = request.SenderId,

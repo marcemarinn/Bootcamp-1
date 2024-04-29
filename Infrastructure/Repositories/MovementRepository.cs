@@ -22,21 +22,23 @@ public class MovementRepository : IMovementRepository
                         .Include(m => m.Account)
                         .AsQueryable();
 
-
-        if (filter.AccountId == null) { 
-        {
-            throw new ArgumentException("Account ID is required.");
-        }
-
         if (filter.AccountId > 0)
         {
             query = query.Where(m => m
         .AccountId == filter.AccountId);
 
         }
-        }
 
-            if (filter.Year != null && filter.Month == null )
+
+            if (filter.AccountId == null) 
+            {
+                throw new ArgumentException("Account ID is required.");
+            }
+
+
+
+
+            if (filter.Year != null && filter.Month == null)
                 throw new InvalidOperationException("You must specify the month along with the year.");
 
 
@@ -77,7 +79,7 @@ public class MovementRepository : IMovementRepository
                 filter.EndDate);
 
 
-            if (filter.Description != null )
+            if (filter.Description != null)
             {
                 var formattedDescription = filter.Description.ToLower();
                 query = query.Where(m => !string.IsNullOrEmpty(m.Description) && m.Description.ToLower() == formattedDescription);
@@ -93,7 +95,7 @@ public class MovementRepository : IMovementRepository
                 Description = m.Description,
                 OperationalDate = m.OperationalDate,
                 AccountId = m.AccountId,
-                TransactionType = m.TransactionType,
+                TransactionType = m.TransactionType.ToString(),
                 Amount = m.Amount
             }).ToList();
         }

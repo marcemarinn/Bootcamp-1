@@ -23,7 +23,7 @@ public class ServicePaymentRepository : IServicePaymentRepository
         var servicePaymentToCreate = request.Adapt<ServicePayment>();
 
        
-        var service = await _bootcampContext.ServicePayments.FindAsync(request.ServiceId);
+        var service = await _bootcampContext.Services.FindAsync(request.ServiceId);
         var account = await _bootcampContext.Accounts.FindAsync(request.AccountId);
 
        

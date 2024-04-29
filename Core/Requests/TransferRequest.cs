@@ -13,7 +13,7 @@ public class TransferRequest
     public int? SenderId { get; set; }
     public int? ReceiverId { get; set; }
     public int NumberAccount { get; set; }
-    public int CurrencyId { get; set; }
+    public int? CurrencyId { get; set; }
 
     public int BankId { get; set; }
 

@@ -12,7 +12,7 @@ public class ExternalAccount
 
     public int NumberAccount { get; set; }
 
-    public int CurrencyId { get; set; }
+    public int? CurrencyId { get; set; }
     public Currency Currency { get; set; } = null!;
 
 

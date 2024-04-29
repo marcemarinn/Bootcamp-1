@@ -14,13 +14,13 @@ public class Transfer
 
     public DateTime TransferDateTime { get; set; }
 
-    public int CurrencyId { get; set; }
-    public Currency Currency { get; set; }
-
     public ExternalAccount? ExternalAccount { get; set; }
 
     public int SenderId { get; set; }
     public Account SenderAccount { get; set; }
+
+    public int CurrencyId { get; set; }
+    public Currency Currency { get; set; }
 
     public int ReceiverId { get; set; }
     public Account ReceiverAccount { get; set; }
